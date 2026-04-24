@@ -10,7 +10,7 @@ const Resume: React.FC = () => {
 
   /* ===== check current command makes redirect ===== */
   if (rerender && currentCommand[0] === "resume") {
-    window.open("https://lunixizm.website/Resume.pdf", "_blank");
+    window.open("/Resume.pdf", "_blank");
   }
 
   return <span></span>;

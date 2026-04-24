@@ -20,7 +20,7 @@ const theme: Themes = {
         300: "#88C0D0",
       },
     },
-    backgroundImage: "https://www.kali.org/wallpapers/images/2024/kali-ferrofluid.jpg",
+    backgroundImage: "/kali-net.jpg",
   },
 };
 
