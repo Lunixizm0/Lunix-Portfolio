@@ -89,7 +89,7 @@ export const Icons = {
   ),
   Browser: (
     <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Tor_Browser_icon.svg/2048px-Tor_Browser_icon.svg.png"
+      src="https://styleguide.torproject.org/static/images/tor-browser/stable/stable.svg"
       alt="Tor logo"
       width="28"
       height="28"

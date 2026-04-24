@@ -231,7 +231,7 @@ function App() {
 
   return (
     <>
-      <h1 className="sr-only" aria-label="Jihed Kdiss">Jihed Kdiss</h1>
+      <h1 className="sr-only" aria-label="Utku Ceylan">Utku Ceylan</h1>
       {themeLoaded && (
         <ThemeProvider theme={selectedTheme}>
           <GlobalStyle />
