@@ -40,7 +40,7 @@ const DesktopShortcuts: React.FC<Props> = ({ onOpenTerminal, onOpenWelcome, onOp
     <Grid hidden={hidden} mobileExpanded={mobileExpanded}>
       <DesktopShortcut label="Browser" onOpen={onOpenWelcome} icon={Icons.Browser} active={activeBrowser} />
       <DesktopShortcut label="Terminal" onOpen={onOpenTerminal} icon={Icons.Terminal} active={activeTerminal} />
-      <DesktopShortcut label="LinkedIn" href="https://www.linkedin.com/in/utku-ceylan-485274393/" icon={Icons.LinkedIn} />
+      <DesktopShortcut label="LinkedIn" href="https://www.linkedin.com/in/utku-ceylan-/" icon={Icons.LinkedIn} />
       <DesktopShortcut label="GitHub" href="https://github.com/Lunixizm0" icon={Icons.GitHub} />
       <DesktopShortcut label="Resume" onOpen={onOpenResume} icon={Icons.PDF} active={activeResume} />
     </Grid>
