@@ -217,7 +217,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
             alignItems: 'center'
           }}>
             <img
-              src="/favicon.png"
+              src="/favicon.webp"
               alt="Lunixizm"
               style={{
                 width: '120px',
@@ -254,7 +254,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
                   border: '1px solid rgba(136,192,208,0.35)',
                   fontSize: '0.92rem'
                 }}>GitHub</a>
-                <a href="https://www.linkedin.com/in/utku-ceylan-485274393" target="_blank" rel="noreferrer" style={{
+                <a href="https://www.linkedin.com/in/utku-ceylan-" target="_blank" rel="noreferrer" style={{
                   textDecoration: 'none', color: '#A3BE8C', background: 'rgba(163, 190, 140, 0.15)', padding: '8px 12px', borderRadius: '999px', border: '1px solid rgba(163,190,140,0.35)', fontSize: '0.92rem'
                 }}>LinkedIn</a>
                 <a href="/Resume.pdf" target="_blank" rel="noreferrer" style={{
@@ -301,7 +301,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
                 transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                 cursor: 'pointer'
               }}
-              onClick={() => window.open('https://www.linkedin.com/in/utku-ceylan-485274393', '_blank')}
+              onClick={() => window.open('https://www.linkedin.com/in/utku-ceylan-', '_blank')}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 14px 30px rgba(163, 190, 140, 0.18)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
             >

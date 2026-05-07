@@ -20,7 +20,7 @@ const theme: Themes = {
         300: "#88C0D0",
       },
     },
-    backgroundImage: "/kali-net.jpg",
+    backgroundImage: "/kali-net.webp",
   },
 };
 

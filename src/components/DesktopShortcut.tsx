@@ -73,7 +73,7 @@ export const Icons = {
   ),
   Blog: (
     <img 
-      src="https://d2fltix0v2e0sb.cloudfront.net/dev-black.png" 
+      src="/dev-black.png" 
       alt="dev.to logo" 
       width="28" 
       height="28" 
@@ -81,7 +81,7 @@ export const Icons = {
   ),
   PDF: (
     <img 
-      src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+      src="/pdf-icon.webp" 
       alt="PDF icon" 
       width="28" 
       height="28"
@@ -89,7 +89,7 @@ export const Icons = {
   ),
   Browser: (
     <img
-      src="https://styleguide.torproject.org/static/images/tor-browser/stable/stable.svg"
+      src="/tor-icon.svg"
       alt="Tor logo"
       width="28"
       height="28"

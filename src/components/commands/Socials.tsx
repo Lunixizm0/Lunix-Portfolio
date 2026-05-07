@@ -68,7 +68,7 @@ const socials = [
   {
     id: 2,
     title: "Linkedin",
-    url: "https://www.linkedin.com/in/utku-ceylan-485274393/",
+    url: "https://www.linkedin.com/in/utku-ceylan-/",
     tab: 1,
   },
   {
