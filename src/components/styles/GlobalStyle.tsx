@@ -39,6 +39,14 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
     color: ${({ theme }) => theme.colors?.text[100]};
   }
 
+  /* background-attachment: fixed is unreliable/glitchy on mobile browsers
+     (notably iOS Safari), so fall back to scroll on small screens */
+  @media (max-width: 768px) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
   /* ===== Custom Scroll Bar ===== */
   /* width */
   ::-webkit-scrollbar {

@@ -189,6 +189,18 @@ const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
 
   const pdfUrl = "/Resume.pdf"; // Ensure this file exists in public root
 
+  // Most mobile browsers (notably iOS Safari) cannot render PDFs inside an
+  // <iframe> and will just show a blank frame, so detect and fall back to
+  // a direct open/download prompt instead.
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobileViewport(mq.matches);
+    update();
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
+
   return (
     <Frame x={x} y={y} width={width} height={height} maximized={isMaximized} hidden={!visible} isTransforming={!dragging.current && !resizing.current} zIndex={zIndex}>
       <TitleBar onMouseDown={(e) => { startDrag(e); onFocus && onFocus(); }}>
@@ -237,13 +249,29 @@ const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
       </Toolbar>
 
       <Content maximized={isMaximized}>
-        <PDFContainer>
-          <iframe src={`${pdfUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`} title="Resume PDF" />
-        </PDFContainer>
+        {isMobileViewport ? (
+          <div style={{
+            width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px',
+            textAlign: 'center', color: '#ECEFF4', fontFamily: 'system-ui, -apple-system, sans-serif',
+          }}>
+            <p style={{ margin: 0, color: '#D8DEE9' }}>
+              PDF preview isn't supported on this device's browser.
+            </p>
+            <a href={pdfUrl} target="_blank" rel="noreferrer" style={{
+              textDecoration: 'none', color: '#EBCB8B', background: 'rgba(235, 203, 139, 0.15)',
+              padding: '10px 16px', borderRadius: '999px', border: '1px solid rgba(235,203,139,0.35)',
+              fontSize: '0.95rem',
+            }}>Open Resume PDF</a>
+          </div>
+        ) : (
+          <PDFContainer>
+            <iframe src={`${pdfUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`} title="Resume PDF" />
+          </PDFContainer>
+        )}
       </Content>
     </Frame>
   );
 };
 
 export default ResumeWindow;
-

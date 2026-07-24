@@ -90,6 +90,27 @@ const Content = styled.div<{ maximized?: boolean }>`
   height: ${({ maximized }) => maximized ? 'calc(100vh - 32px - 36px)' : 'calc(100% - 32px - 36px)'};
   padding: 22px 24px; color:#ECEFF4; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   overflow:auto;
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 16px 14px;
+
+    .welcome-hero {
+      grid-template-columns: 1fr !important;
+      justify-items: center;
+      text-align: center;
+    }
+    .welcome-avatar {
+      width: 84px !important;
+      height: 84px !important;
+    }
+    .welcome-title {
+      font-size: 1.6rem !important;
+    }
+    .welcome-hero-text > div[role="group"] {
+      justify-content: center;
+    }
+  }
 `;
 
 const Handle = styled.div<{ pos: 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' }>`
@@ -203,20 +224,21 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
       </Toolbar>
 
       <Content maximized={isMaximized}>
-        <div style={{
+        <div className="welcome-hero-wrap" style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '24px',
           animation: 'fadeInUp 0.8s ease-out'
         }}>
           {/* Hero */}
-          <section style={{
+          <section className="welcome-hero" style={{
             display: 'grid',
             gridTemplateColumns: '120px 1fr',
             gap: '20px',
             alignItems: 'center'
           }}>
             <img
+              className="welcome-avatar"
               src="/favicon.webp"
               alt="Lunixizm"
               style={{
@@ -228,8 +250,8 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
                 border: '1px solid rgba(255,255,255,0.12)'
               }}
             />
-            <div>
-              <h1 style={{
+            <div className="welcome-hero-text">
+              <h1 className="welcome-title" style={{
                 margin: 0,
                 fontSize: '2.2rem',
                 background: 'linear-gradient(135deg, #88C0D0 0%, #5E81AC 100%)',
@@ -349,4 +371,3 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
 };
 
 export default WelcomeBrowserWindow;
-
