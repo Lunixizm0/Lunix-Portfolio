@@ -110,6 +110,9 @@ const Content = styled.div<{ maximized?: boolean }>`
     .welcome-hero-text > div[role="group"] {
       justify-content: center;
     }
+    .welcome-cards {
+      grid-template-columns: 1fr !important;
+    }
   }
 `;
 
@@ -287,9 +290,9 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
           </section>
 
           {/* Highlight cards */}
-          <div style={{
+          <div className="welcome-cards" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '20px',
             marginTop: '6px'
           }}>
@@ -306,11 +309,14 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
             >
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', gap: '10px' }}>
-                <span style={{ fontSize: '1.5rem' }}>🛡️</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#88C0D0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 2 L20 6 V11 C20 16 16.5 20 12 22 C7.5 20 4 16 4 11 V6 Z" />
+                  <path d="M9.5 12 L11 13.5 L14.5 10" />
+                </svg>
                 <h3 style={{ margin: 0, color: '#88C0D0', fontSize: '1.05rem' }}>Security Research</h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6 as any, color: '#D8DEE9' }}>
-                4+ years of experience in malware analysis. CTF author/instructor at <strong style={{ color: '#A3BE8C' }}>Thinktank</strong>.
+                Freelance security researcher and bug bounty hunter, focused on vulnerability discovery and responsible disclosure in open-source Linux ecosystems.
               </p>
             </div>
 
@@ -328,11 +334,15 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
             >
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', gap: '10px' }}>
-                <span style={{ fontSize: '1.5rem' }}>💼</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A3BE8C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="2" />
+                  <path d="M3 9 H21" />
+                  <path d="M9 4 V9" />
+                </svg>
                 <h3 style={{ margin: 0, color: '#A3BE8C', fontSize: '1.05rem' }}>Professional Experience</h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6 as any, color: '#D8DEE9' }}>
-                The Creator, Founder and Cybersecurity Instructor at <strong style={{ color: '#EBCB8B' }}>Thinktank</strong>. Part of the <strong style={{ color: '#EBCB8B' }}>Pars Robotics</strong> team.
+                Cyber Security &amp; Software Team Captain at <strong style={{ color: '#EBCB8B' }}>ThinkTank</strong>, leading security projects and technical direction.
               </p>
             </div>
 
@@ -349,11 +359,38 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
             >
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', gap: '10px' }}>
-                <span style={{ fontSize: '1.5rem' }}>🏫</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EBCB8B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 3 L21 8 L12 13 L3 8 Z" />
+                  <path d="M6 10.5 V16 C6 17.5 8.5 19 12 19 C15.5 19 18 17.5 18 16 V10.5" />
+                </svg>
                 <h3 style={{ margin: 0, color: '#EBCB8B', fontSize: '1.05rem' }}>Education</h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6 as any, color: '#D8DEE9' }}>
-                Software Engineering at <strong style={{ color: '#D08770' }}>BIST MTAL</strong>: computer architecture, algorithms, low-level programming.
+                Computer Science at <strong style={{ color: '#D08770' }}>BIST MTAL</strong>: computer architecture, algorithms, and low-level programming.
+              </p>
+            </div>
+
+            <div
+              style={{
+                background: 'linear-gradient(135deg, rgba(208, 135, 112, 0.10) 0%, rgba(180, 142, 173, 0.10) 100%)',
+                border: '1px solid rgba(208, 135, 112, 0.25)',
+                borderRadius: '14px',
+                padding: '18px',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 14px 30px rgba(208, 135, 112, 0.18)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', gap: '10px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D08770" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2 V5 M12 19 V22 M4.2 4.2 L6.3 6.3 M17.7 17.7 L19.8 19.8 M2 12 H5 M19 12 H22 M4.2 19.8 L6.3 17.7 M17.7 6.3 L19.8 4.2" />
+                </svg>
+                <h3 style={{ margin: 0, color: '#D08770', fontSize: '1.05rem' }}>Robotics</h3>
+              </div>
+              <p style={{ margin: 0, lineHeight: 1.6 as any, color: '#D8DEE9' }}>
+                Was part of the <strong style={{ color: '#B48EAD' }}>Pars Robotics</strong> team, contributing on a short-term basis.
               </p>
             </div>
           </div>
