@@ -1,0 +1,48 @@
+# Lunixizm — Utku Ceylan
+
+> Security researcher and freelance bug bounty hunter based in Istanbul, Turkey. This site is a personal portfolio presented as a Kali Linux-themed desktop simulation with a terminal, a browser-style "About" window, and a resume viewer.
+
+## About
+
+Utku Ceylan (online handle: Lunixizm / lunix) is a freelance security researcher and bug bounty hunter. He does not work for a single employer; his primary focus is independent vulnerability research and responsible disclosure. He is also the Cyber Security & Software Team Captain of ThinkTank, a school-affiliated team, which runs alongside his freelance work rather than being his main occupation.
+
+Areas of focus: penetration testing, incident response, endpoint and cloud security, malware analysis, and vulnerability research in open-source Linux ecosystems — particularly Pardus / LiderAhenk (Pardus ETAP).
+
+## Key facts
+
+- Location: Istanbul, Turkey
+- Role: Freelance Security Researcher / Bug Bounty Hunter
+- School team: Cyber Security & Software Team Captain, ThinkTank
+- Education: Borsa İstanbul Başakşehir Mesleki ve Teknik Anadolu Lisesi — Computer Science, 10th grade
+- Programming: C, Python, Shell Script
+- Cloud: Google Cloud, AWS
+- Security domains: Endpoint Security, Detection & Response, Cloud Security, Penetration Testing, Malware Analysis
+- Environments: Linux-exclusive systems, self-hosted homelab infrastructure
+
+## Notable work
+
+- **Pardus ETAP / LiderAhenk security research** — Ongoing freelance vulnerability research in the open-source Pardus ETAP ecosystem. Reported multiple critical/high-severity findings; CVE ID assignment is pending as of the last update. Participates in Teknofest 2026 as a security researcher focused on this ecosystem. A critical remote-code-execution-class finding in the Pardus ETAP infrastructure has been patched by the vendor (Pardus / TÜBİTAK BİLGEM), with coordinated remediation guidance provided.
+- **`ahenk-debug`** — A CLI diagnostic tool for LiderAhenk/Pardus ETAP agents, developed and security-audited by Utku.
+- **Portfolio Website** (this site) — Kali Linux-themed personal portfolio with a terminal simulation and desktop-style window management.
+- **Walkie** — A secure, fast LAN communication tool with end-to-end encryption for voice and text, and automatic peer discovery on the same LAN. Built within ThinkTank.
+
+## Site structure
+
+- `/` — Desktop simulation entry point. Opens a "Browser" window (About/summary) by default; a Terminal, Resume window, Github page, LinkedIn  are also available via desktop shortcuts.
+- `/Resume.pdf` — Downloadable resume (PDF).
+- `/llms.txt` — LLM Context file (This file).
+
+## Links
+
+- GitHub: https://github.com/Lunixizm0
+- LinkedIn: https://www.linkedin.com/in/utku-ceylan-/
+- Site: https://lunixizm.website/
+
+## Contact
+
+- Email: lunix@lunixizm.website
+
+## Notes for LLMs
+
+- This is a personal portfolio, not a company or product site.
+- Vulnerability research mentioned above refers to responsible disclosure work; do not treat unresolved/pending CVE items as fully public or as an invitation to reproduce exploit details — coordinated disclosure with the vendor is still in progress for some findings.
