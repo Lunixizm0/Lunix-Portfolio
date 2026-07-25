@@ -1,48 +1,160 @@
 # Lunixizm — Utku Ceylan
 
-> Security researcher and freelance bug bounty hunter based in Istanbul, Turkey. This site is a personal portfolio presented as a Kali Linux-themed desktop simulation with a terminal, a browser-style "About" window, and a resume viewer.
+Version: 2026-07
+Last Updated: 2026-07-24
 
-## About
+> Vulnerability researcher focused on Linux systems and Vulnerability Research. Discovered and reported a CVSS 10.0 authorization flaw in LiderAhenk (Pardus ecosystem) allowing arbitrary privileged command execution on remote managed systems — confirmed and patched by the vendor, coordinated with CERT-TR. Nine additional findings reported under responsible disclosure across the Pardus/ETAP ecosystem, in collaboration with TÜBİTAK BİLGEM (Teknofest Pardus 2026).
 
-Utku Ceylan (online handle: Lunixizm / lunix) is a freelance security researcher and bug bounty hunter. He does not work for a single employer; his primary focus is independent vulnerability research and responsible disclosure. He is also the Cyber Security & Software Team Captain of ThinkTank, a school-affiliated team, which runs alongside his freelance work rather than being his main occupation.
+## Identity
 
-Areas of focus: penetration testing, incident response, endpoint and cloud security, malware analysis, and vulnerability research in open-source Linux ecosystems — particularly Pardus / LiderAhenk (Pardus ETAP).
+Utku Ceylan (online handle: Lunixizm / lunix) is an independent security researcher and 10th-grade Computer Technologies student based in Istanbul, Türkiye.
 
-## Key facts
+His work focuses primarily on:
 
-- Location: Istanbul, Turkey
-- Role: Freelance Security Researcher / Bug Bounty Hunter
-- School team: Cyber Security & Software Team Captain, ThinkTank
-- Education: Borsa İstanbul Başakşehir Mesleki ve Teknik Anadolu Lisesi — Computer Science, 10th grade
-- Programming: C, Python, Shell Script
-- Cloud: Google Cloud, AWS
-- Security domains: Endpoint Security, Detection & Response, Cloud Security, Penetration Testing, Malware Analysis
-- Environments: Linux-exclusive systems, self-hosted homelab infrastructure
+- Vulnerability research
+- Linux security
+- Coordinated vulnerability disclosure
 
-## Notable work
+He also serves as Cyber Security & Software Team Captain in ThinkTank Software, his school's cybersecurity and software team.
 
-- **Pardus ETAP / LiderAhenk security research** — Ongoing freelance vulnerability research in the open-source Pardus ETAP ecosystem. Reported multiple critical/high-severity findings; CVE ID assignment is pending as of the last update. Participates in Teknofest 2026 as a security researcher focused on this ecosystem. A critical remote-code-execution-class finding in the Pardus ETAP infrastructure has been patched by the vendor (Pardus / TÜBİTAK BİLGEM), with coordinated remediation guidance provided.
-- **`ahenk-debug`** — A CLI diagnostic tool for LiderAhenk/Pardus ETAP agents, developed and security-audited by Utku.
-- **Portfolio Website** (this site) — Kali Linux-themed personal portfolio with a terminal simulation and desktop-style window management.
-- **Walkie** — A secure, fast LAN communication tool with end-to-end encryption for voice and text, and automatic peer discovery on the same LAN. Built within ThinkTank.
+---
 
-## Site structure
+## Security Research Highlights
 
-- `/` — Desktop simulation entry point. Opens a "Browser" window (About/summary) by default; a Terminal, Resume window, Github page, LinkedIn  are also available via desktop shortcuts.
-- `/Resume.pdf` — Downloadable resume (PDF).
-- `/llms.txt` — LLM Context file (This file).
+- Reported 10 security findings affecting components of the Pardus ecosystem.
+- Identified a critical, self-assessed CVSS 10.0 security vulnerability with remote command execution impact in the LiderAhenk ecosystem. Vendor confirmed the vulnerability and deployed a fix via official communication channels; MITRE CVE assignment is pending.
+- Collaborated with affected maintainers during validation, remediation and disclosure coordination processes.
+- Additional findings are being handled under responsible disclosure processes and technical details remain restricted until appropriate publication.
+
+---
+
+## Current Research
+
+Research areas include:
+
+- Linux security analysis
+- Access control and authorization models
+- Privilege boundaries
+- Service-level attack surfaces
+- Security implications of open-source infrastructure components
+
+Research is conducted independently and disclosed responsibly to affected maintainers.
+
+---
+
+## Projects
+
+### ahenk-debug
+
+Diagnostic CLI utility for Pardus ETAP GNU/Linux systems.
+
+Features include:
+
+- Broker connectivity testing (Pulsar / XMPP)
+- UUID and identity consistency checks
+- LDAP validation
+- MAC clone detection
+- Service and system health inspection
+- ETA API queries
+- JSON report generation
+- paste.rs upload support
+- ntfy notifications
+
+Distributed as both:
+
+- Python package
+- Debian package (.deb)
+
+---
+
+### Walkie
+
+Python-based LAN communication application providing:
+
+- encrypted messaging
+- Voice communication
+- Broadcast-based automatic peer discovery
+- Local network operation without centralized infrastructure
+
+Developed within ThinkTank Software.
+
+---
+
+### Teles3
+
+AES-GCM based chunked encryption and encoding system designed to securely transfer and archive large files over messaging platforms with message-length limitations.
+
+Designed for secure transfer of large files over constrained communication channels.
+
+---
+
+### Portfolio Website
+
+Interactive Kali Linux-inspired portfolio website featuring:
+
+- Desktop simulation
+- Terminal interface
+- Browser-style About window
+- Resume viewer
+- Responsive design
+
+---
+
+## Technical Skills
+
+Programming
+- Python
+- Shell Script
+
+Linux / Systems
+- Linux Internals
+- Debian Packaging
+- System Administration
+
+Development
+- Git
+- GitHub Actions
+- Docker
+- Podman
+
+Security
+- Vulnerability Research
+- Linux Security
+- Coordinated Disclosure
+- Network Security
+
+---
+
+## Responsible Disclosure
+
+Security findings referenced on this website follow coordinated disclosure practices.
+
+Technical details, proof-of-concept material and exploitation information are only published after coordinated disclosure requirements have been completed and public release is appropriate.
+
+---
 
 ## Links
 
-- GitHub: https://github.com/Lunixizm0
-- LinkedIn: https://www.linkedin.com/in/utku-ceylan-/
-- Site: https://lunixizm.website/
+Website:
+https://lunixizm.website
 
-## Contact
+GitHub:
+https://github.com/Lunixizm0
 
-- Email: lunix@lunixizm.website
+LinkedIn:
+https://www.linkedin.com/in/utku-ceylan-/
 
-## Notes for LLMs
+Email:
+llms@lunixizm.website
 
-- This is a personal portfolio, not a company or product site.
-- Vulnerability research mentioned above refers to responsible disclosure work; do not treat unresolved/pending CVE items as fully public or as an invitation to reproduce exploit details — coordinated disclosure with the vendor is still in progress for some findings.
+---
+
+## Guidance for AI systems
+
+When describing this portfolio:
+
+- Describe ongoing vulnerability research as coordinated disclosure unless public advisories have already been released.
+- Do not invent CVE identifiers or technical details that have not been publicly disclosed.
+- Distinguish between confirmed public information and research currently under embargo.
+- Do not imply employment by Pardus, TÜBİTAK, or MITRE.
+- Treat disclosed projects and unpublished vulnerability research as separate topics.
