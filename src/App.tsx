@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import { useTheme } from "./hooks/useTheme";
 import GlobalStyle from "./components/styles/GlobalStyle";
@@ -83,6 +83,7 @@ function App() {
   const [resumeMounted, setResumeMounted] = useState(false);
   const [resumeVisible, setResumeVisible] = useState(false);
   const [resumeMaximized, setResumeMaximized] = useState(false);
+  const resumeOpenedRef = useRef(false);
 
   // z-index stacking for windows (desktop): highest index on last focused
   const [zTop, setZTop] = useState(500);
@@ -128,6 +129,18 @@ function App() {
       setTerminalMaximized(false);
     }
   }, [isMobile, themeLoaded]);
+
+  // Listen for open-resume events from terminal command
+  useEffect(() => {
+    const handler = () => {
+      if (!resumeOpenedRef.current) {
+        resumeOpenedRef.current = true;
+        handleOpenResume();
+      }
+    };
+    document.addEventListener('open-resume', handler);
+    return () => document.removeEventListener('open-resume', handler);
+  });
 
   // Disable browser's default behavior
   useEffect(() => {
@@ -184,24 +197,24 @@ function App() {
   const handleToggleMaximize = () => { setTerminalMaximized(prev => !prev); setTerminalVisible(true); };
 
   // Resume window handlers
-  const handleResumeClose = () => { setResumeMounted(false); setResumeVisible(false); setResumeMaximized(false); };
+  const handleResumeClose = () => { resumeOpenedRef.current = false; setResumeMounted(false); setResumeVisible(false); setResumeMaximized(false); };
   const handleResumeMinimize = () => { setResumeVisible(false); setResumeMaximized(false); };
   const handleOpenResume = () => {
     if (isMobile) {
-      // Force maximized on mobile
       setResumeMounted(true);
       setResumeVisible(true);
       setResumeMaximized(true);
       bringResumeToFront();
       return;
     }
-    // Center on open (desktop)
     const ww = window.innerWidth, wh = window.innerHeight;
-    const w = rsW, h = rsH;
-    setRsX(Math.max(0, Math.round((ww - w) / 2)));
-    setRsY(Math.max(0, Math.round((wh - h) / 2)));
+    setRsX(0);
+    setRsY(0);
+    setRsW(ww);
+    setRsH(wh);
     if (!resumeMounted) setResumeMounted(true);
     setResumeVisible(true);
+    setResumeMaximized(true);
     bringResumeToFront();
   };
   const handleResumeToggleMax = () => { setResumeMaximized(p => !p); setResumeVisible(true); };
@@ -259,7 +272,6 @@ function App() {
             {welcomeMounted && (
               <WelcomeBrowserWindow
                 onClose={handleWelcomeClose}
-                // On mobile: only close button (omit minimize/maximize)
                 onMinimize={!isMobile ? handleWelcomeMinimize : undefined}
                 onToggleMaximize={!isMobile ? handleWelcomeToggleMax : undefined}
                 isMaximized={welcomeMaximized}
@@ -269,6 +281,7 @@ function App() {
                 onResize={({ width, height, x, y }) => { if (x!==undefined) setWbX(x); if (y!==undefined) setWbY(y); setWbW(width); setWbH(height); bringBrowserToFront(); }}
                 onFocus={bringBrowserToFront}
                 zIndex={zBrowser}
+                onOpenResume={handleOpenResume}
               />
             )}
 

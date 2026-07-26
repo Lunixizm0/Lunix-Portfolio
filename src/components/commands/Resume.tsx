@@ -1,17 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import _ from "lodash";
 import { termContext } from "../Terminal";
 
 const Resume: React.FC = () => {
-  const { history, rerender } = useContext(termContext);
+  const { history, index, rerender } = useContext(termContext);
 
-  /* ===== get current command ===== */
-  const currentCommand = _.split(history[0], " ");
-
-  /* ===== check current command makes redirect ===== */
-  if (rerender && currentCommand[0] === "resume") {
-    window.open("/Resume.pdf", "_blank");
-  }
+  useEffect(() => {
+    if (rerender && history[index] === "resume") {
+      document.dispatchEvent(new CustomEvent('open-resume'));
+    }
+  }, [rerender, history, index]);
 
   return <span></span>;
 };

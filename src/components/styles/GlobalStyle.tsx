@@ -25,10 +25,7 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
     display: block;
   }
 
-  body {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 500;
-    background-color: ${({ theme }) => theme.backgroundImage ? 'transparent' : theme.colors?.body};
+  html {
     ${({ theme }) => theme.backgroundImage && `
       background-image: url(${theme.backgroundImage});
       background-size: cover;
@@ -36,13 +33,19 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
       background-repeat: no-repeat;
       background-attachment: fixed;
     `}
+  }
+
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    background-color: ${({ theme }) => theme.backgroundImage ? 'transparent' : theme.colors?.body};
     color: ${({ theme }) => theme.colors?.text[100]};
   }
 
   /* background-attachment: fixed is unreliable/glitchy on mobile browsers
      (notably iOS Safari), so fall back to scroll on small screens */
   @media (max-width: 768px) {
-    body {
+    html {
       background-attachment: scroll;
     }
   }

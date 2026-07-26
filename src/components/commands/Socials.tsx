@@ -74,7 +74,7 @@ const socials = [
   {
     id: 3,
     title: "Mail",
-    url: "lunix@lunixizm.website",
+    url: "portfolio@lunixizm.website",
     tab: 5,
   },
 ];
