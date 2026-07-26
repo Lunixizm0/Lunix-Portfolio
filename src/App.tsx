@@ -95,7 +95,7 @@ function App() {
   const [wbX, setWbX] = useState(140);
   const [wbY, setWbY] = useState(60);
   const [wbW, setWbW] = useState(900);
-  const [wbH, setWbH] = useState(560);
+  const [wbH, setWbH] = useState(680);
   const [rsX, setRsX] = useState(160);
   const [rsY, setRsY] = useState(80);
   const [rsW, setRsW] = useState(900);
