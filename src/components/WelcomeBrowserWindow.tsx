@@ -19,6 +19,8 @@ type Props = {
 const Frame = styled.div<{ x?: number; y?: number; width?: number; height?: number; maximized?: boolean; hidden?: boolean; isTransforming?: boolean; zIndex?: number }>`
   position: fixed;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   ${({ theme }) => theme.backgroundImage && `
     background: rgba(0, 0, 0, 0.35);
     border-radius: 12px;
@@ -40,6 +42,7 @@ const Frame = styled.div<{ x?: number; y?: number; width?: number; height?: numb
 `;
 
 const TitleBar = styled.div`
+  flex-shrink: 0;
   ${({ theme }) => theme.backgroundImage && `
     background: linear-gradient(to bottom, rgba(32, 32, 32, 0.9), rgba(24, 24, 24, 0.9));
     height: 32px; display: flex; align-items: center; justify-content: center;
@@ -71,6 +74,7 @@ const ControlButton = styled.button<{ variant?: 'min' | 'max' | 'close' }>`
 `;
 
 const Toolbar = styled.div`
+  flex-shrink: 0;
   ${({ theme }) => theme.backgroundImage && `
     height: 36px; display:flex; align-items:center; padding: 0 16px;
     background: rgba(24, 24, 24, 0.85);
@@ -87,9 +91,10 @@ const LocationBar = styled.div`
 `;
 
 const Content = styled.div<{ maximized?: boolean }>`
-  height: ${({ maximized }) => maximized ? 'calc(100vh - 32px - 36px)' : 'calc(100% - 32px - 36px)'};
+  flex: 1;
+  min-height: 0;
   padding: 22px 24px; color:#ECEFF4; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  overflow:auto;
+  overflow: auto;
   box-sizing: border-box;
 
   @media (max-width: 600px) {
@@ -131,7 +136,7 @@ const Handle = styled.div<{ pos: 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 's
 const MIN_W = 520; const MIN_H = 340;
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 
-const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = false, onToggleMaximize, x = 140, y = 60, width = 900, height = 560, onMove, onResize, visible = true, onFocus, zIndex }) => {
+const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = false, onToggleMaximize, x = 140, y = 60, width = 900, height = 680, onMove, onResize, visible = true, onFocus, zIndex }) => {
   const posRef = useRef({ x, y });
   const sizeRef = useRef({ width, height });
   useEffect(() => { posRef.current = { x, y }; }, [x, y]);
@@ -268,7 +273,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
                 fontSize: '1.05rem',
                 color: '#D8DEE9',
                 opacity: 0.95
-              }}>Security Researcher • Software Engineer</p>
+              }}>Security Researcher</p>
               <div role="group" aria-label="Quick links" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '12px' }}>
                 <a href="https://github.com/Lunixizm0" target="_blank" rel="noreferrer" style={{
                   textDecoration: 'none',

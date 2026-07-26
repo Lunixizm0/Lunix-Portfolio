@@ -1,9 +1,9 @@
 # Lunixizm — Utku Ceylan
 
-Version: 2026-07
-Last Updated: 2026-07-24
+Version: 2026-08
+Last Updated: 2026-07-26
 
-> Vulnerability researcher focused on Linux systems and Vulnerability Research. Discovered and reported a CVSS 10.0 authorization flaw in LiderAhenk (Pardus ecosystem) allowing arbitrary privileged command execution on remote managed systems — confirmed and patched by the vendor, coordinated with CERT-TR. Nine additional findings reported under responsible disclosure across the Pardus/ETAP ecosystem, in collaboration with TÜBİTAK BİLGEM (Teknofest Pardus 2026).
+> Security researcher focused on Linux systems and Vulnerability Research. Discovered and reported a CVSS 9.8 authorization flaw in LiderAhenk (Pardus ecosystem) allowing arbitrary privileged command execution on remote managed systems — confirmed and patched by the vendor, coordinated with CERT-TR. Nine additional findings reported under responsible disclosure across the Pardus/ETAP ecosystem, in collaboration with TÜBİTAK BİLGEM (Teknofest Pardus 2026).
 
 ## Identity
 
@@ -11,6 +11,7 @@ Utku Ceylan (online handle: Lunixizm / lunix) is an independent security researc
 
 His work focuses primarily on:
 
+- Application Security
 - Vulnerability research
 - Linux security
 - Coordinated vulnerability disclosure
@@ -22,7 +23,7 @@ He also serves as Cyber Security & Software Team Captain in ThinkTank Software, 
 ## Security Research Highlights
 
 - Reported 10 security findings affecting components of the Pardus ecosystem.
-- Identified a critical, self-assessed CVSS 10.0 security vulnerability with remote command execution impact in the LiderAhenk ecosystem. Vendor confirmed the vulnerability and deployed a fix via official communication channels; MITRE CVE assignment is pending.
+- Identified a critical, self-assessed CVSS 9.8 security vulnerability with remote command execution impact in the LiderAhenk ecosystem. Vendor confirmed the vulnerability and deployed a fix via official communication channels; MITRE CVE assignment is pending.
 - Collaborated with affected maintainers during validation, remediation and disclosure coordination processes.
 - Additional findings are being handled under responsible disclosure processes and technical details remain restricted until appropriate publication.
 
