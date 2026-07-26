@@ -20,7 +20,7 @@ const Frame = styled.div<{ x?: number; y?: number; width?: number; height?: numb
   position: fixed;
   box-sizing: border-box;
   ${({ theme }) => theme.backgroundImage && `
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.65);
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
     overflow: hidden;

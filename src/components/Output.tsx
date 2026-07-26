@@ -33,9 +33,7 @@ const Output: React.FC<Props> = ({ index, cmd }) => {
     const full = ['sudo', ...arg].join(' ');
     return (
       <OutputContainer>
-        <GeneralOutput>{full}: command not found</GeneralOutput>
-        <GeneralOutput>Hint: sudo: unable to resolve host kali: Name or service not known</GeneralOutput>
-        <GeneralOutput>Hint: you are already root</GeneralOutput>
+        <GeneralOutput>Nah, least privilage concept. There is no need for that.</GeneralOutput>
       </OutputContainer>
     );
   }

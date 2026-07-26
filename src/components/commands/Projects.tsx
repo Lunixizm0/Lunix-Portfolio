@@ -45,7 +45,7 @@ const Projects: React.FC = () => {
     <div data-testid="projects">
       <ProjectsIntro>
         “Talk is cheap. Show me the code”? I got you! <br />
-        Here are some of my projects you shouldn't miss
+        Here are some of my projects.
       </ProjectsIntro>
       {projects.map(({ id, title, desc, url }) => (
         <ProjectContainer key={id}>
@@ -66,12 +66,19 @@ const Projects: React.FC = () => {
 const projects = [
   {
     id: 1,
+    title: "ahenk-debug",
+    desc: "A diagnostic tool for Ahenk, a remote managament system for Pardus ETAP.",
+    url: "https://github.com/Lunixizm0/ahenk-debug",
+  },
+
+  {
+    id: 2,
     title: "Data-Collector",
     desc: "A data collector tool for Windows.",
     url: "https://github.com/Lunixizm0/Data-Collector",
   },
   {
-    id: 2,
+    id: 3,
     title: "Walkie Talkie",
     desc: "A communication tool that allows users to send messages and talk securely over LAN.",
     url: "https://github.com/Lunixizm0/Walkie",

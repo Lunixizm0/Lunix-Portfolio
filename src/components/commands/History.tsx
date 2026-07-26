@@ -5,7 +5,7 @@ import { termContext } from "../Terminal";
 
 const History: React.FC = () => {
   const { history, index, executeCommand } = useContext(termContext);
-  const currentHistory = _.reverse(_.slice(history, index));
+  const currentHistory = _.reverse(_.slice(history, 0, index));
 
   const handleHistoryClick = (cmd: string) => {
     if (executeCommand) {
