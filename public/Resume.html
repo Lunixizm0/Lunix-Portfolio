@@ -174,7 +174,7 @@
 
     <h2 class="section">PROFILE</h2>
     <p class="body-text">
-      Security researcher focused on Linux systems and Vulnerability research. Discovered and reported a CVSS 9.8 authorization flaw in LiderAhenk (Pardus ecosystem) allowing arbitrary privileged command execution on remote managed systems. Confirmed and patched by the vendor, coordinated with CERT-TR. Nine additional findings submitted under responsible disclosure across the Pardus/ETAP ecosystem, in collaboration with TÜBİTAK BİLGEM (Teknofest Pardus 2026).
+      Security researcher focused on Linux systems and Vulnerability research. Discovered and reported multiple finding across GNU/Linux ecosystem.
 </p>
 
     <h2 class="section">EXPERIENCE</h2>
@@ -183,8 +183,7 @@
       <p class="entry-title">Independent Securıty Researcher</p>
       <p class="entry-meta">June 2024 - Present</p>
       <ul class="bullets">
-         <li>Identified a critical authorization vulnerability (CWE-862) in LiderAhenk: the broker enforces no ACL between agents, allowing any authenticated agent to publish commands to another agent's topic. Because credentials can be obtained from installing ahenk agent, this effectively grants unauthenticated remote command execution across managed endpoints.</li>
-        <li>Methodology: noticed the agent had no client-side authorization checks and hypothesized the broker might not enforce this either; confirmed it by provisioning a second agent with credentials extracted from a standard ETAP VM, then publishing crafted commands to another agent's pulsar topic.</li>
+         <li>Identified a critical vulnerability in LiderAhenk. (9.8 CVSS)</li>
         <li>Vendor confirmed and remediated; coordinated with CERT-TR; MITRE CVE assignment pending.</li>
         <li>Conducted independent security research on the Pardus ecosystem in collaboration with Pardus and TÜBİTAK BİLGEM teams as part of Teknofest Pardus 2026.</li>
         <li>Submitted 10 security findings affecting the Pardus &amp; ETAP ecosystem via responsible disclosure.</li>
@@ -222,7 +221,7 @@
           <li><strong style="color:var(--navy-soft)">1</strong> vendor-confirmed vulnerability (MITRE CVE pending)</li>
           <li>Multiple disclosure coordinated with <strong style="color:var(--navy-soft)">CERT-TR</strong></li>
           <li>Contributor - <strong style="color:var(--navy-soft)">Teknofest Pardus 2026</strong></li>
-          <li>Active in <strong style="color:var(--navy-soft)">CTF</strong> competitions</li>
+          <li>Active in competitions</li>
         </ul>
 
       </div>
