@@ -126,6 +126,19 @@ const SocialWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
   useEffect(() => { posRef.current = { x, y }; }, [x, y]);
   useEffect(() => { sizeRef.current = { width, height }; }, [width, height]);
 
+  // Mobile keeps the Bad Apple title; desktop shows a plain "Social"
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobileViewport(mq.matches);
+    update();
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
+  const socialTitle = isMobileViewport
+    ? 'Social / Rule 86: If it exists, it can play Bad Apple'
+    : 'Social';
+
   const dragging = useRef(false);
   const dragStart = useRef({ mx: 0, my: 0, sx: 0, sy: 0 });
   const [isTransforming, setIsTransforming] = useState(false);
@@ -230,7 +243,7 @@ const SocialWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
       )}
 
       <Toolbar>
-        <LocationBar>Social / Rule 86: If it exists, it can play Bad Apple</LocationBar>
+        <LocationBar>{socialTitle}</LocationBar>
       </Toolbar>
 
       <Content maximized={isMaximized}>

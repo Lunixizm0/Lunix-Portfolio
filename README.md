@@ -16,7 +16,7 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 - **Resume window** — in-app PDF viewer with download button.
 - **Social hub** (`/social`) — a live "am I available?" page:
   - Status computed from the weekly schedule in `public/social/config.json` (school hours Mon–Fri 09:00–17:00, everything else = available), shown in the visitor's own timezone.
-  - Fullscreen **Bad Apple!!** PV background streamed from YouTube (Rule 86: *"If it exists, it can play Bad Apple"*), with muted autoplay and a one-tap unmute button.
+  - Fullscreen video background streamed from YouTube with muted autoplay, sound controls, and a "video-only" mode toggle that hides everything but the video and the sound bar: **Bad Apple!!** PV (Rule 86: *"If it exists, it can play Bad Apple"*) on mobile, a selected desktop video on larger screens.
 - **Responsive** — on mobile the site switches to the browser window maximized, windows use dynamic viewport units (`dvh`) so they are never cut off behind Samsung-style browser menu bars, and the desktop wallpaper is replaced with a colorful gradient.
 
 ## Tech stack
@@ -87,7 +87,7 @@ pnpm format:check  # prettier --check
 ```
 public/
   social/                 # standalone social/availability hub
-    index.html            #   entry (YouTube Bad Apple background, Social hub)
+    index.html            #   entry (device-aware YouTube background, Social hub)
     config.json           #   all availability data & messages (edit this)
     musaitlik/            #   availability page assets
   robots.txt              # /social disallowed for crawlers

@@ -12,7 +12,8 @@
   "ters": true,
   "_ters": "true iken: aşağıdaki saatler OKUL saatleridir ve o saatlerde müsait DEĞİLSİN. Kalan tüm zaman müsait sayılır.",
   "seo": {
-    "baslikKalibi": "Social / Rule 86: If it exists, it can play Bad Apple",
+    "baslikKalibi": "Social",
+    "baslikKalibiMobil": "Social / Rule 86: If it exists, it can play Bad Apple",
     "aciklamaKalibi": "{ad} — Okul saatlerim: {saatler}. Bu saatlerde müsait değilim. {sonraki}",
     "anahtarKelimeler": [
       "müsaitlik",
