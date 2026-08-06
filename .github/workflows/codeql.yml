@@ -72,11 +72,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Audit dependencies
+        run: pnpm audit --prod
+
       - name: Build project
         run: pnpm build
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           # security-and-quality: kapsamlı; security-extended temeldir.
@@ -88,7 +91,7 @@ jobs:
           threads: 2
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
           ram: 4096
@@ -98,5 +101,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: codeql-sarif-${{ matrix.language }}
-          path: ../results/${{ matrix.language }}.sarif
+          path: ${{ github.workspace }}/../results/${{ matrix.language }}.sarif
           retention-days: 7
