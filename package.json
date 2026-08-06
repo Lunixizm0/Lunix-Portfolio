@@ -1,9 +1,10 @@
 {
   "name": "Portfolio-Project",
   "private": true,
-  "version": "1.3.1",
+  "version": "150.0.0",
+  "packageManager": "pnpm@10.16.1",
   "scripts": {
-    "dev": "vite --port 8000",
+    "dev": "vite --port 8001",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",

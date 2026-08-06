@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ProjectsIntro } from "../styles/Projects.styled";
 import { Cmd, CmdDesc, CmdList, HelpWrapper } from "../styles/Help.styled";
 import {
@@ -11,19 +11,36 @@ import { termContext } from "../Terminal";
 import Usage from "../Usage";
 
 const Socials: React.FC = () => {
-  const { arg, history, rerender, executeCommand } = useContext(termContext);
+  const { arg, history, index, rerender, executeCommand } = useContext(termContext);
 
   /* ===== get current command ===== */
-  const currentCommand = getCurrentCmdArry(history);
+  const currentCommand = getCurrentCmdArry(history[index]);
+
+  /* ===== open the Social desktop app window ===== */
+  useEffect(() => {
+    if (rerender && history[index] === "socials" && index === history.length - 1) {
+      document.dispatchEvent(new CustomEvent('open-social', { detail: { index } }));
+    }
+  }, [rerender, history, index]);
+
+  /* ===== prevent the redirect from firing more than once per command ===== */
+  const handledRef = useRef<string | null>(null);
 
   /* ===== check current command makes redirect ===== */
   useEffect(() => {
-    if (checkRedirect(rerender, currentCommand, "socials")) {
+    const cmd = history[index];
+    if (
+      rerender &&
+      index === history.length - 1 &&
+      checkRedirect(rerender, currentCommand, "socials")
+    ) {
+      if (handledRef.current === cmd) return;
+      handledRef.current = cmd;
       socials.forEach(({ id, url }) => {
         id === parseInt(arg[1]) && window.open(url, "_blank");
       });
     }
-  }, [arg, rerender, currentCommand]);
+  }, [arg, rerender, currentCommand, index, history]);
 
   /* ===== handle social link click ===== */
   const handleSocialClick = (url: string) => {
@@ -32,7 +49,7 @@ const Socials: React.FC = () => {
 
   /* ===== check arg is valid ===== */
   const checkArg = () =>
-    isArgInvalid(arg, "go", ["1", "2", "3", "4"]) ? (
+    isArgInvalid(arg, "go", ["1", "2", "3"]) ? (
       <Usage cmd="socials" />
     ) : null;
 

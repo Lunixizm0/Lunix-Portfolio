@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 
-// Resume window with integrated PDF viewer
+// Social window: embeds the static müsaitlik (availability) app served from /social/
 
 type Props = {
   onClose: () => void;
   onMinimize?: () => void;
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
-  x?: number; y?: number; width?: number; height?: number;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
   onMove?: (x: number, y: number) => void;
   onResize?: (next: { width: number; height: number; x?: number; y?: number }) => void;
   visible?: boolean;
@@ -33,13 +36,14 @@ const Frame = styled.div<{ x?: number; y?: number; width?: number; height?: numb
     inset: 0; margin: 0; max-width: none; width: 100vw; height: 100vh; height: 100dvh; border-radius: 0;
   `}
   ${({ maximized, x, y, width, height }) => !maximized && css`
-    left: ${x ?? 160}px; top: ${y ?? 80}px; width: ${width ?? 900}px; height: ${height ?? 560}px;
+    left: ${x ?? 120}px; top: ${y ?? 50}px; width: ${width ?? 1000}px; height: ${height ?? 820}px;
   `}
-  z-index: ${({ zIndex }) => zIndex ?? 400};
+  z-index: ${({ zIndex }) => zIndex ?? 450};
   transition: ${({ isTransforming }) => isTransforming ? 'left 180ms ease, top 180ms ease, width 180ms ease, height 180ms ease, border-radius 180ms ease' : 'none'};
 `;
 
 const TitleBar = styled.div`
+  flex-shrink: 0;
   ${({ theme }) => theme.backgroundImage && `
     background: linear-gradient(to bottom, rgba(32, 32, 32, 0.9), rgba(24, 24, 24, 0.9));
     height: 32px; display: flex; align-items: center; justify-content: center;
@@ -71,13 +75,12 @@ const ControlButton = styled.button<{ variant?: 'min' | 'max' | 'close' }>`
 `;
 
 const Toolbar = styled.div`
+  flex-shrink: 0;
   ${({ theme }) => theme.backgroundImage && `
-    height: 36px; display:flex; align-items:center; padding: 0 12px 0 16px;
+    height: 36px; display:flex; align-items:center; padding: 0 16px;
     background: rgba(24, 24, 24, 0.85);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     font-family: system-ui, -apple-system, sans-serif;
-    justify-content: space-between;
-    gap: 12px;
   `}
 `;
 
@@ -89,29 +92,15 @@ const LocationBar = styled.div`
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 `;
 
-const Actions = styled.div`
-  display:flex; align-items:center; gap: 8px;
-`;
-
-const DownloadLink = styled.a`
-  display:inline-flex; align-items:center; gap: 6px;
-  height: 28px; padding: 0 10px; border-radius: 6px;
-  color:#ECEFF4; text-decoration:none; font-size:12px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
-  &:hover { background: rgba(255,255,255,0.1); }
-  &:active { transform: translateY(1px); }
-`;
-
 const Content = styled.div<{ maximized?: boolean }>`
   height: ${({ maximized }) => maximized ? 'calc(100vh - 32px - 36px); height: calc(100dvh - 32px - 36px)' : 'calc(100% - 32px - 36px)'};
-  overflow:hidden;
+  overflow: hidden;
+  background: #0a0a0a;
 `;
 
-const PDFContainer = styled.div`
+const IFrameContainer = styled.div`
   width: 100%; height: 100%;
-  & iframe, & embed { width: 100%; height: 100%; border: 0; }
+  & iframe { width: 100%; height: 100%; border: 0; display: block; }
 `;
 
 // Resize handles
@@ -127,10 +116,11 @@ const Handle = styled.div<{ pos: 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 's
   ${({ pos }) => pos === 'sw' && css`bottom: -2px; left: -2px; width: 10px; height: 10px; cursor: nesw-resize;`}
 `;
 
-const MIN_W = 520; const MIN_H = 340;
+const MIN_W = 520;
+const MIN_H = 460;
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 
-const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = false, onToggleMaximize, x = 160, y = 80, width = 900, height = 560, onMove, onResize, visible = true, onFocus, zIndex }) => {
+const SocialWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = false, onToggleMaximize, x = 120, y = 50, width = 1000, height = 820, onMove, onResize, visible = true, onFocus, zIndex }) => {
   const posRef = useRef({ x, y });
   const sizeRef = useRef({ width, height });
   useEffect(() => { posRef.current = { x, y }; }, [x, y]);
@@ -144,26 +134,38 @@ const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (isMaximized) return;
     if (dragging.current) {
-      const dx = e.clientX - dragStart.current.mx; const dy = e.clientY - dragStart.current.my;
-      const ww = window.innerWidth; const wh = window.innerHeight;
+      const dx = e.clientX - dragStart.current.mx;
+      const dy = e.clientY - dragStart.current.my;
+      const ww = window.innerWidth;
+      const wh = window.innerHeight;
       const nx = clamp(dragStart.current.sx + dx, 0, Math.max(0, ww - sizeRef.current.width));
       const ny = clamp(dragStart.current.sy + dy, 0, Math.max(0, wh - sizeRef.current.height));
       onMove && onMove(nx, ny);
     } else if (resizing.current) {
       const { dir, mx, my, sx, sy, sw, sh } = resizing.current;
-      let nw = sw, nh = sh, nx = sx, ny = sy; const dx = e.clientX - mx; const dy = e.clientY - my;
-      if (dir.includes('e')) nw = sw + dx; if (dir.includes('s')) nh = sh + dy;
+      let nw = sw;
+      let nh = sh;
+      let nx = sx;
+      let ny = sy;
+      const dx = e.clientX - mx;
+      const dy = e.clientY - my;
+      if (dir.includes('e')) nw = sw + dx;
+      if (dir.includes('s')) nh = sh + dy;
       if (dir.includes('w')) { nw = sw - dx; nx = sx + dx; }
       if (dir.includes('n')) { nh = sh - dy; ny = sy + dy; }
-      nw = Math.max(MIN_W, nw); nh = Math.max(MIN_H, nh);
-      const ww = window.innerWidth; const wh = window.innerHeight;
-      nx = clamp(nx, 0, Math.max(0, ww - nw)); ny = clamp(ny, 0, Math.max(0, wh - nh));
+      nw = Math.max(MIN_W, nw);
+      nh = Math.max(MIN_H, nh);
+      const ww = window.innerWidth;
+      const wh = window.innerHeight;
+      nx = clamp(nx, 0, Math.max(0, ww - nw));
+      ny = clamp(ny, 0, Math.max(0, wh - nh));
       onResize && onResize({ width: nw, height: nh, x: nx, y: ny });
     }
   }, [isMaximized, onMove, onResize]);
 
   const onMouseUp = useCallback(() => {
-    dragging.current = false; resizing.current = null;
+    dragging.current = false;
+    resizing.current = null;
     document.body.style.userSelect = '';
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
@@ -193,36 +195,22 @@ const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  const pdfUrl = "/Resume.pdf"; // Ensure this file exists in public root
-
-  // Most mobile browsers (notably iOS Safari) cannot render PDFs inside an
-  // <iframe> and will just show a blank frame, so detect and fall back to
-  // a direct open/download prompt instead.
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const update = () => setIsMobileViewport(mq.matches);
-    update();
-    mq.addEventListener?.('change', update);
-    return () => mq.removeEventListener?.('change', update);
-  }, []);
-
   return (
     <Frame x={x} y={y} width={width} height={height} maximized={isMaximized} hidden={!visible} isTransforming={!dragging.current && !resizing.current} zIndex={zIndex}>
       <TitleBar onMouseDown={(e) => { startDrag(e); onFocus && onFocus(); }}>
-        <WindowTitle>Resume</WindowTitle>
+        <WindowTitle>Social</WindowTitle>
         <WindowControls aria-label="Window controls">
           {onMinimize && (
-            <ControlButton variant='min' title='Minimize' aria-label='Minimize' onClick={onMinimize}>
+            <ControlButton variant="min" title="Minimize" aria-label="Minimize" onClick={onMinimize}>
               <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="1" y="5" width="8" height="1" rx="0.5" /></svg>
             </ControlButton>
           )}
           {onToggleMaximize && (
-            <ControlButton variant='max' title='Maximize' aria-label='Maximize' onClick={onToggleMaximize}>
+            <ControlButton variant="max" title="Maximize" aria-label="Maximize" onClick={onToggleMaximize}>
               <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="2" y="2" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
             </ControlButton>
           )}
-          <ControlButton variant='close' title='Close' aria-label='Close' onClick={onClose}>
+          <ControlButton variant="close" title="Close" aria-label="Close" onClick={onClose}>
             <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2 L8 8 M8 2 L2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           </ControlButton>
         </WindowControls>
@@ -230,54 +218,28 @@ const ResumeWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximized = fals
 
       {!isMaximized && (
         <>
-          <Handle pos='n' onMouseDown={startResize('n')} />
-          <Handle pos='s' onMouseDown={startResize('s')} />
-          <Handle pos='e' onMouseDown={startResize('e')} />
-          <Handle pos='w' onMouseDown={startResize('w')} />
-          <Handle pos='ne' onMouseDown={startResize('ne')} />
-          <Handle pos='nw' onMouseDown={startResize('nw')} />
-          <Handle pos='se' onMouseDown={startResize('se')} />
-          <Handle pos='sw' onMouseDown={startResize('sw')} />
+          <Handle pos="n" onMouseDown={startResize('n')} />
+          <Handle pos="s" onMouseDown={startResize('s')} />
+          <Handle pos="e" onMouseDown={startResize('e')} />
+          <Handle pos="w" onMouseDown={startResize('w')} />
+          <Handle pos="ne" onMouseDown={startResize('ne')} />
+          <Handle pos="nw" onMouseDown={startResize('nw')} />
+          <Handle pos="se" onMouseDown={startResize('se')} />
+          <Handle pos="sw" onMouseDown={startResize('sw')} />
         </>
       )}
 
       <Toolbar>
-        <LocationBar>{pdfUrl}</LocationBar>
-        <Actions>
-          <DownloadLink href={pdfUrl} download>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M5 21h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            Download
-          </DownloadLink>
-        </Actions>
+        <LocationBar>Social / Rule 86: If it exists, it can play Bad Apple</LocationBar>
       </Toolbar>
 
       <Content maximized={isMaximized}>
-        {isMobileViewport ? (
-          <div style={{
-            width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px',
-            textAlign: 'center', color: '#ECEFF4', fontFamily: 'system-ui, -apple-system, sans-serif',
-          }}>
-            <p style={{ margin: 0, color: '#D8DEE9' }}>
-              PDF preview isn't supported on this device's browser.
-            </p>
-            <a href={pdfUrl} target="_blank" rel="noreferrer" style={{
-              textDecoration: 'none', color: '#EBCB8B', background: 'rgba(235, 203, 139, 0.15)',
-              padding: '10px 16px', borderRadius: '999px', border: '1px solid rgba(235,203,139,0.35)',
-              fontSize: '0.95rem',
-            }}>Open Resume PDF</a>
-          </div>
-        ) : (
-          <PDFContainer>
-            <iframe src={`${pdfUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`} title="Resume PDF" />
-          </PDFContainer>
-        )}
+        <IFrameContainer>
+          <iframe src="/social/index.html" title="Social" />
+        </IFrameContainer>
       </Content>
     </Frame>
   );
 };
 
-export default ResumeWindow;
+export default SocialWindow;

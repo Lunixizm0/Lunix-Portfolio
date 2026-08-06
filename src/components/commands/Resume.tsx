@@ -6,8 +6,8 @@ const Resume: React.FC = () => {
   const { history, index, rerender } = useContext(termContext);
 
   useEffect(() => {
-    if (rerender && history[index] === "resume") {
-      document.dispatchEvent(new CustomEvent('open-resume'));
+    if (rerender && history[index] === "resume" && index === history.length - 1) {
+      document.dispatchEvent(new CustomEvent('open-resume', { detail: { index } }));
     }
   }, [rerender, history, index]);
 

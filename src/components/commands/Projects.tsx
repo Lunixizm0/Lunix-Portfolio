@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import {
   checkRedirect,
   getCurrentCmdArry,
@@ -14,19 +14,29 @@ import { termContext } from "../Terminal";
 import Usage from "../Usage";
 
 const Projects: React.FC = () => {
-  const { arg, history, rerender, executeCommand } = useContext(termContext);
+  const { arg, history, index, rerender, executeCommand } = useContext(termContext);
 
   /* ===== get current command ===== */
-  const currentCommand = getCurrentCmdArry(history);
+  const currentCommand = getCurrentCmdArry(history[index]);
+
+  /* ===== prevent the redirect from firing more than once per command ===== */
+  const handledRef = useRef<string | null>(null);
 
   /* ===== check current command is redirect ===== */
   useEffect(() => {
-    if (checkRedirect(rerender, currentCommand, "projects")) {
+    const cmd = history[index];
+    if (
+      rerender &&
+      index === history.length - 1 &&
+      checkRedirect(rerender, currentCommand, "projects")
+    ) {
+      if (handledRef.current === cmd) return;
+      handledRef.current = cmd;
       projects.forEach(({ id, url }) => {
         id === parseInt(arg[1]) && window.open(url, "_blank");
       });
     }
-  }, [arg, rerender, currentCommand]);
+  }, [arg, rerender, currentCommand, index, history]);
 
   /* ===== handle project click ===== */
   const handleProjectClick = (id: number, url: string) => {
@@ -39,7 +49,7 @@ const Projects: React.FC = () => {
       <Usage cmd="projects" />
     ) : null;
 
-  return arg.length > 0 || arg.length > 2 ? (
+  return arg.length > 0 ? (
     checkArg()
   ) : (
     <div data-testid="projects">
@@ -82,6 +92,12 @@ const projects = [
     title: "Walkie Talkie",
     desc: "A communication tool that allows users to send messages and talk securely over LAN.",
     url: "https://github.com/Lunixizm0/Walkie",
+  },
+  {
+    id: 4,
+    title: "Lunix-Portfolio",
+    desc: "This interactive terminal-style portfolio & social hub (the site you're on right now).",
+    url: "https://github.com/Lunixizm0/Lunix-Portfolio",
   }
 ];
 

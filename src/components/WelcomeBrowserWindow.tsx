@@ -33,7 +33,7 @@ const Frame = styled.div<{ x?: number; y?: number; width?: number; height?: numb
   `}
   ${({ hidden }) => hidden && css`display:none;`}
   ${({ maximized, theme }) => maximized && theme.backgroundImage && css`
-    inset: 0; margin: 0; max-width: none; width: 100vw; height: 100vh; border-radius: 0;
+    inset: 0; margin: 0; max-width: none; width: 100vw; height: 100vh; height: 100dvh; border-radius: 0;
   `}
   ${({ maximized, x, y, width, height }) => !maximized && css`
     left: ${x ?? 140}px; top: ${y ?? 60}px; width: ${width ?? 900}px; height: ${height ?? 560}px;
@@ -171,6 +171,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
 
   const onMouseUp = useCallback(() => {
     dragging.current = false; resizing.current = null;
+    document.body.style.userSelect = '';
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
     const t = setTimeout(() => setIsTransforming(false), 0);
@@ -179,6 +180,8 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
 
   const startDrag = (e: React.MouseEvent) => {
     if (isMaximized) return;
+    e.preventDefault();
+    document.body.style.userSelect = 'none';
     dragging.current = true;
     setIsTransforming(false);
     dragStart.current = { mx: e.clientX, my: e.clientY, sx: posRef.current.x, sy: posRef.current.y };
@@ -187,7 +190,10 @@ const WelcomeBrowserWindow: React.FC<Props> = ({ onClose, onMinimize, isMaximize
   };
 
   const startResize = (dir: React.ComponentProps<typeof Handle>['pos']) => (e: React.MouseEvent) => {
-    if (isMaximized) return; e.stopPropagation();
+    if (isMaximized) return;
+    e.preventDefault();
+    e.stopPropagation();
+    document.body.style.userSelect = 'none';
     resizing.current = { dir, mx: e.clientX, my: e.clientY, sx: posRef.current.x, sy: posRef.current.y, sw: sizeRef.current.width, sh: sizeRef.current.height };
     setIsTransforming(false);
     window.addEventListener('mousemove', onMouseMove);

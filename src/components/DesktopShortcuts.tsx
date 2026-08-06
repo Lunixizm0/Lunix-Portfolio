@@ -6,10 +6,12 @@ type Props = {
   onOpenTerminal: () => void;
   onOpenWelcome: () => void;
   onOpenResume: () => void;
+  onOpenSocial: () => void;
   hidden?: boolean;
   activeTerminal?: boolean;
   activeBrowser?: boolean;
   activeResume?: boolean;
+  activeSocial?: boolean;
   mobileExpanded?: boolean;
 };
 
@@ -35,11 +37,12 @@ const Grid = styled.div<{ hidden?: boolean; mobileExpanded?: boolean }>`
   `}
 `;
 
-const DesktopShortcuts: React.FC<Props> = ({ onOpenTerminal, onOpenWelcome, onOpenResume, hidden, activeTerminal, activeBrowser, activeResume, mobileExpanded }) => {
+const DesktopShortcuts: React.FC<Props> = ({ onOpenTerminal, onOpenWelcome, onOpenResume, onOpenSocial, hidden, activeTerminal, activeBrowser, activeResume, activeSocial, mobileExpanded }) => {
   return (
     <Grid hidden={hidden} mobileExpanded={mobileExpanded}>
       <DesktopShortcut label="Browser" onOpen={onOpenWelcome} icon={Icons.Browser} active={activeBrowser} />
       <DesktopShortcut label="Terminal" onOpen={onOpenTerminal} icon={Icons.Terminal} active={activeTerminal} />
+      <DesktopShortcut label="Social" onOpen={onOpenSocial} icon={Icons.Social} active={activeSocial} />
       <DesktopShortcut label="LinkedIn" href="https://www.linkedin.com/in/utku-ceylan-/" icon={Icons.LinkedIn} />
       <DesktopShortcut label="GitHub" href="https://github.com/Lunixizm0" icon={Icons.GitHub} />
       <DesktopShortcut label="Resume" onOpen={onOpenResume} icon={Icons.PDF} active={activeResume} />
