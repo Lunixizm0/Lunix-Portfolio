@@ -27,6 +27,14 @@ const Wrap = styled.button<{ hidden?: boolean }>`
   ${({ hidden }) => hidden && 'display:none;'}
   &:hover { background: rgba(0,0,0,0.46); }
   &:active { transform: translateY(1px); }
+
+  /* on mobile, move it to the bottom-right so it doesn't overlap the
+     browser/terminal window controls in the top-right corner */
+  @media (max-width: 768px) {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+  }
 `;
 
 const Icon = ({ exit }: { exit?: boolean }) => (

@@ -4,12 +4,17 @@ import { Wrapper } from "../styles/Output.styled";
 import { termContext } from "../Terminal";
 
 const Email: React.FC = () => {
-  const { history, rerender } = useContext(termContext);
+  const { history, index, rerender } = useContext(termContext);
 
   /* ===== get current command ===== */
-  const currentCommand = _.split(history[0], " ");
+  const currentCommand = _.split(history[index], " ");
 
-  if (rerender && currentCommand[0] === "email" && currentCommand.length <= 1) {
+  if (
+    rerender &&
+    index === history.length - 1 &&
+    currentCommand[0] === "email" &&
+    currentCommand.length <= 1
+  ) {
     window.open("mailto:" + "portfolio@lunixizm.website", "_self");
   }
 
