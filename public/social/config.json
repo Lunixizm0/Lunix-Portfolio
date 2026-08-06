@@ -1,0 +1,126 @@
+{
+  "_okuBeni": "Tüm müsaitlik verisi bu dosyadır. Değiştirip kaydet — site açılışta buradan okur. Saatler Türkiye saatiyle (Europe/Istanbul) yazılır; ziyaretçiye kendi saat diliminde gösterilir. Bu dosya herkese açık yayınlanır, içine ASLA şifre/token yazma.",
+  "surum": 1,
+  "kisi": {
+    "ad": "Utku Ceylan",
+    "unvan": "Security Researcher",
+    "kisaTanim": "Bu sayfa canlıdır: açtığın anda müsait miyim, ne kadar süre müsaitim onu gösterir.",
+    "site": "lunixizm.website",
+    "sosyalUrl": "https://lunixizm.website",
+    "sosyalEtiket": "lunixizm.website"
+  },
+  "ters": true,
+  "_ters": "true iken: aşağıdaki saatler OKUL saatleridir ve o saatlerde müsait DEĞİLSİN. Kalan tüm zaman müsait sayılır.",
+  "seo": {
+    "baslikKalibi": "Social / Rule 86: If it exists, it can play Bad Apple",
+    "aciklamaKalibi": "{ad} — Okul saatlerim: {saatler}. Bu saatlerde müsait değilim. {sonraki}",
+    "anahtarKelimeler": [
+      "müsaitlik",
+      "okul saatleri",
+      "Utku Ceylan"
+    ]
+  },
+  "saat": {
+    "kaynakSaatDilimi": "Europe/Istanbul",
+    "kaynakOfset": "+03:00",
+    "ziyaretciSaatineCevir": true
+  },
+  "haftalikSaatler": {
+    "0": {
+      "acik": false,
+      "bas": "10:00",
+      "bit": "14:00"
+    },
+    "1": {
+      "acik": true,
+      "bas": "09:00",
+      "bit": "17:00"
+    },
+    "2": {
+      "acik": true,
+      "bas": "09:00",
+      "bit": "17:00"
+    },
+    "3": {
+      "acik": true,
+      "bas": "09:00",
+      "bit": "17:00"
+    },
+    "4": {
+      "acik": true,
+      "bas": "09:00",
+      "bit": "17:00"
+    },
+    "5": {
+      "acik": true,
+      "bas": "09:00",
+      "bit": "17:00"
+    },
+    "6": {
+      "acik": false,
+      "bas": "10:00",
+      "bit": "14:00"
+    }
+  },
+  "_haftalikSaatler": "0=Pazar … 6=Cumartesi. acik=false ise o gün hiç okulun yok, yani tüm gün müsaisin.",
+  "tatiller": [],
+  "istisnalar": [],
+  "_istisnalar": "Örnek: {\"tarih\":\"2026-12-25\",\"durum\":\"acik\",\"kategori\":\"Özel iş\",\"not\":\"RANDEVU\",\"bas\":\"15:00\",\"bit\":\"18:30\"}. durum: acik=ekstra meşguliyet, yalniz=o gün yalnız bu saatler, tumgun=tüm gün meşgul, kapali=izin.",
+  "cizelge": {
+    "bas": "06:00",
+    "saat": 18
+  },
+  "_cizelge": "Gün çizelgesi: başlangıç saati ve kaç saat gösterileceği.",
+  "uyku": {
+    "acik": false,
+    "bas": "00:00",
+    "bit": "06:00"
+  },
+  "_uyku": "Gece uyku penceresi. acik=true yaparsan bu saatlerde müsait sayılmazsın ve geri sayım bu aralığı saymaz. bas<bit olmalı.",
+  "mesajlar": {
+    "musait": "ŞU AN MÜSAİTİM",
+    "mesgul": "ŞU AN MÜSAİT DEĞİLİM",
+    "mesgulAlt": "{bit}'de okul bitiyor, sonrasında müsaitim",
+    "mesaiBitti": "Okul bitti — müsaitim",
+    "uyku": "Gece uykusu — 06:00'dan sonra tekrar müsaitim",
+    "haftaSonu": "Hafta sonu — müsaitim",
+    "musaitOncesi": "{bas}'a kadar müsaitim — sonra okul",
+    "musaitTumGun": "Bugün okul yok, tüm gün müsaitim",
+    "musaitTatil": "{tatilAd} — bugün tüm gün müsaitim",
+    "calisiyor": "Okul",
+    "calismiyor": "Okul yok",
+    "gunler": [
+      "Pazar",
+      "Pazartesi",
+      "Salı",
+      "Çarşamba",
+      "Perşembe",
+      "Cuma",
+      "Cumartesi"
+    ],
+    "gunlerKisa": [
+      "Pzt",
+      "Sal",
+      "Çar",
+      "Per",
+      "Cum",
+      "Cmt",
+      "Paz"
+    ],
+    "aylar": [
+      "Ocak",
+      "Şubat",
+      "Mart",
+      "Nisan",
+      "Mayıs",
+      "Haziran",
+      "Temmuz",
+      "Ağustos",
+      "Eylül",
+      "Ekim",
+      "Kasım",
+      "Aralık"
+    ]
+  },
+  "goruntulenme": 0
+}

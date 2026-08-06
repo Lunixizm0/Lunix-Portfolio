@@ -43,10 +43,19 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
   }
 
   /* background-attachment: fixed is unreliable/glitchy on mobile browsers
-     (notably iOS Safari), so fall back to scroll on small screens */
+     (notably iOS Safari), so fall back to scroll on small screens.
+     Also swap the desktop wallpaper for a colorful gradient on mobile. */
   @media (max-width: 768px) {
     html {
       background-attachment: scroll;
+      background-image:
+        radial-gradient(at 15% 5%, rgba(0, 212, 255, 0.30) 0, transparent 55%),
+        radial-gradient(at 85% 15%, rgba(114, 9, 183, 0.55) 0, transparent 55%),
+        radial-gradient(at 70% 95%, rgba(247, 37, 133, 0.50) 0, transparent 55%),
+        linear-gradient(160deg, #0C0C1E 0%, #14142e 35%, #2a0a4a 70%, #3d0b34 100%);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   }
 

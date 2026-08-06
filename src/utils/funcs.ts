@@ -30,11 +30,11 @@ export const isArgInvalid = (
 /**
  * Transform current cmd & arg into array
  * then return back the array
- * @param {string[]} history - The history array
+ * @param {string} currentCommand - the current command string
  * @returns {string[]} array of cmd string
  */
-export const getCurrentCmdArry = (history: string[]) =>
-  _.split(history[0].trim(), " ");
+export const getCurrentCmdArry = (currentCommand: string): string[] =>
+  _.split(currentCommand.trim(), " ");
 
 /**
  * Check current render makes redirect
@@ -101,7 +101,7 @@ export const argTab = (
 
   // 7) if input is 'socials go '
   else if (_.startsWith(inputVal, "socials go ")) {
-    ["1.Github", "2.Facebook", "3.Linkedin"].forEach(t => {
+    ["1.GitHub", "2.Linkedin", "3.Mail"].forEach(t => {
       hintsCmds = [...hintsCmds, t];
     });
     return hintsCmds;
@@ -110,10 +110,10 @@ export const argTab = (
   // 8) if input is 'projects go '
   else if (_.startsWith(inputVal, "projects go ")) {
     [
-      "1.Blog",
-      "2.Radio Medenine Website",
-      "3.Deagle",
-      "4.Writeups",
+      "1.ahenk-debug",
+      "2.Data-Collector",
+      "3.Walkie Talkie",
+      "4.Lunix-Portfolio",
     ].forEach(t => {
       hintsCmds = [...hintsCmds, t];
     });

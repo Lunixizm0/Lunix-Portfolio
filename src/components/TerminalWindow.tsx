@@ -34,7 +34,7 @@ const WindowFrame = styled.div<{ maximized?: boolean; hidden?: boolean; x?: numb
   ${({ hidden }) => hidden && css`display:none;`}
 
   ${({ maximized, theme }) => maximized && theme.backgroundImage && css`
-    position: fixed; inset: 0; margin: 0; max-width: none; width: 100vw; height: 100vh; border-radius: 0;
+    position: fixed; inset: 0; margin: 0; max-width: none; width: 100vw; height: 100vh; height: 100dvh; border-radius: 0;
   `}
 
   ${({ maximized, x, y, width, height }) => !maximized && css`
@@ -98,7 +98,7 @@ const TerminalContent = styled.div<{ maximized?: boolean }>`
   ${({ theme }) => theme.backgroundImage && `
     background: transparent; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;
   `}
-  height: ${({ maximized }) => maximized ? "calc(100vh - 32px - 28px)" : "calc(100% - 32px - 28px)"};
+  height: ${({ maximized }) => maximized ? "calc(100vh - 32px - 28px); height: calc(100dvh - 32px - 28px)" : "calc(100% - 32px - 28px)"};
   & > * { flex: 1 1 auto; min-height: 0; }
 `;
 
@@ -170,6 +170,7 @@ const TerminalWindow: React.FC<Props> = ({
   const onMouseUp = useCallback(() => {
     dragging.current = false;
     resizing.current = null;
+    document.body.style.userSelect = '';
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
     // Re-enable transitions after interaction ends
@@ -179,6 +180,8 @@ const TerminalWindow: React.FC<Props> = ({
 
   const startDrag = (e: React.MouseEvent) => {
     if (isMaximized) return;
+    e.preventDefault();
+    document.body.style.userSelect = 'none';
     dragging.current = true;
     setIsTransforming(false); // no animation during drag
     dragStart.current = { mx: e.clientX, my: e.clientY, sx: posRef.current.x, sy: posRef.current.y };
@@ -188,7 +191,9 @@ const TerminalWindow: React.FC<Props> = ({
 
   const startResize = (dir: HandleProps['pos']) => (e: React.MouseEvent) => {
     if (isMaximized) return;
+    e.preventDefault();
     e.stopPropagation();
+    document.body.style.userSelect = 'none';
     resizing.current = { dir, mx: e.clientX, my: e.clientY, sx: posRef.current.x, sy: posRef.current.y, sw: sizeRef.current.width, sh: sizeRef.current.height };
     setIsTransforming(false); // no animation during resize
     window.addEventListener('mousemove', onMouseMove);

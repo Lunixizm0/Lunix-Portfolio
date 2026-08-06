@@ -6,6 +6,7 @@ import TerminalWindow from "./components/TerminalWindow";
 import DesktopShortcuts from "./components/DesktopShortcuts";
 import WelcomeBrowserWindow from "./components/WelcomeBrowserWindow";
 import ResumeWindow from "./components/ResumeWindow";
+import SocialWindow from "./components/SocialWindow";
 import FullscreenToggle from "./components/FullscreenToggle";
 
 export const themeContext = createContext<
@@ -83,16 +84,24 @@ function App() {
   const [resumeMounted, setResumeMounted] = useState(false);
   const [resumeVisible, setResumeVisible] = useState(false);
   const [resumeMaximized, setResumeMaximized] = useState(false);
-  const resumeOpenedRef = useRef(false);
+  const resumeOpenedRef = useRef<number | null>(null);
+
+  // Social window state
+  const [socialMounted, setSocialMounted] = useState(false);
+  const [socialVisible, setSocialVisible] = useState(false);
+  const [socialMaximized, setSocialMaximized] = useState(false);
+  const socialOpenedRef = useRef<number | null>(null);
 
   // z-index stacking for windows (desktop): highest index on last focused
   const [zTop, setZTop] = useState(500);
   const [zBrowser, setZBrowser] = useState(200);
   const [zTerminal, setZTerminal] = useState(300);
   const [zResume, setZResume] = useState(400);
+  const [zSocial, setZSocial] = useState(450);
   const bringBrowserToFront = () => { const next = zTop + 1; setZTop(next); setZBrowser(next); };
   const bringTerminalToFront = () => { const next = zTop + 1; setZTop(next); setZTerminal(next); };
   const bringResumeToFront = () => { const next = zTop + 1; setZTop(next); setZResume(next); };
+  const bringSocialToFront = () => { const next = zTop + 1; setZTop(next); setZSocial(next); };
   const [wbX, setWbX] = useState(140);
   const [wbY, setWbY] = useState(60);
   const [wbW, setWbW] = useState(900);
@@ -101,6 +110,11 @@ function App() {
   const [rsY, setRsY] = useState(80);
   const [rsW, setRsW] = useState(900);
   const [rsH, setRsH] = useState(560);
+
+  const [scX, setScX] = useState(120);
+  const [scY, setScY] = useState(50);
+  const [scW, setScW] = useState(1000);
+  const [scH, setScH] = useState(820);
 
   // Startup layout: mobile => browser only, maximized; desktop => browser only centered
   useEffect(() => {
@@ -113,6 +127,10 @@ function App() {
       setTerminalMounted(false);
       setTerminalVisible(false);
       setTerminalMaximized(false);
+
+      setSocialMounted(false);
+      setSocialVisible(false);
+      setSocialMaximized(false);
     } else {
       setWelcomeMounted(true);
       setWelcomeVisible(true);
@@ -127,19 +145,45 @@ function App() {
       setTerminalMounted(false);
       setTerminalVisible(false);
       setTerminalMaximized(false);
+
+      setSocialMounted(false);
+      setSocialVisible(false);
+      setSocialMaximized(false);
     }
   }, [isMobile, themeLoaded]);
 
   // Listen for open-resume events from terminal command
   useEffect(() => {
-    const handler = () => {
-      if (!resumeOpenedRef.current) {
-        resumeOpenedRef.current = true;
+    const handler = (e: Event) => {
+      const idx = (e as CustomEvent).detail?.index;
+      if (idx === undefined) return;
+      if (idx !== resumeOpenedRef.current) {
+        resumeOpenedRef.current = idx;
         handleOpenResume();
+      } else if (resumeMounted && !resumeVisible) {
+        setResumeVisible(true);
+        bringResumeToFront();
       }
     };
     document.addEventListener('open-resume', handler);
     return () => document.removeEventListener('open-resume', handler);
+  });
+
+  // Listen for open-social events from terminal command
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const idx = (e as CustomEvent).detail?.index;
+      if (idx === undefined) return;
+      if (idx !== socialOpenedRef.current) {
+        socialOpenedRef.current = idx;
+        handleOpenSocial();
+      } else if (socialMounted && !socialVisible) {
+        setSocialVisible(true);
+        bringSocialToFront();
+      }
+    };
+    document.addEventListener('open-social', handler);
+    return () => document.removeEventListener('open-social', handler);
   });
 
   // Disable browser's default behavior
@@ -197,7 +241,7 @@ function App() {
   const handleToggleMaximize = () => { setTerminalMaximized(prev => !prev); setTerminalVisible(true); };
 
   // Resume window handlers
-  const handleResumeClose = () => { resumeOpenedRef.current = false; setResumeMounted(false); setResumeVisible(false); setResumeMaximized(false); };
+  const handleResumeClose = () => { setResumeMounted(false); setResumeVisible(false); setResumeMaximized(false); };
   const handleResumeMinimize = () => { setResumeVisible(false); setResumeMaximized(false); };
   const handleOpenResume = () => {
     if (isMobile) {
@@ -218,6 +262,28 @@ function App() {
     bringResumeToFront();
   };
   const handleResumeToggleMax = () => { setResumeMaximized(p => !p); setResumeVisible(true); };
+
+  // Social window handlers
+  const handleSocialClose = () => { setSocialMounted(false); setSocialVisible(false); setSocialMaximized(false); };
+  const handleSocialMinimize = () => { setSocialVisible(false); setSocialMaximized(false); };
+  const handleOpenSocial = () => {
+    if (isMobile) {
+      setSocialMounted(true);
+      setSocialVisible(true);
+      setSocialMaximized(true);
+      bringSocialToFront();
+      return;
+    }
+    const ww = window.innerWidth, wh = window.innerHeight;
+    const w = scW, h = scH;
+    setScX(Math.max(0, Math.round((ww - w) / 2)));
+    setScY(Math.max(0, Math.round((wh - h) / 2)));
+    if (!socialMounted) setSocialMounted(true);
+    setSocialVisible(true);
+    setSocialMaximized(true);
+    bringSocialToFront();
+  };
+  const handleSocialToggleMax = () => { setSocialMaximized(p => !p); setSocialVisible(true); };
 
   // Welcome window handlers
   const handleWelcomeClose = () => { setWelcomeMounted(false); setWelcomeVisible(false); setWelcomeMaximized(false); };
@@ -254,10 +320,12 @@ function App() {
               onOpenTerminal={handleOpenFromShortcut}
               onOpenWelcome={handleOpenWelcome}
               onOpenResume={handleOpenResume}
-              hidden={terminalMaximized || welcomeMaximized || resumeMaximized}
+              onOpenSocial={handleOpenSocial}
+              hidden={terminalMaximized || welcomeMaximized || resumeMaximized || socialMaximized}
               activeTerminal={!isMobile && terminalMounted && terminalVisible}
               activeBrowser={!isMobile && welcomeMounted && welcomeVisible}
               activeResume={!isMobile && resumeMounted && resumeVisible}
+              activeSocial={!isMobile && socialMounted && socialVisible}
               mobileExpanded={isMobile && !terminalMounted}
             />
 
@@ -265,7 +333,7 @@ function App() {
             <FullscreenToggle
               isFullscreen={isFullscreen}
               onToggle={toggleFullscreen}
-              hidden={terminalMaximized || welcomeMaximized || resumeMaximized}
+              hidden={terminalMaximized || welcomeMaximized || resumeMaximized || socialMaximized}
             />
 
             {/* Welcome Browser Window opens on start on desktop only */}
@@ -316,6 +384,23 @@ function App() {
                 onResize={({ width, height, x, y }) => { if (x!==undefined) setRsX(x); if (y!==undefined) setRsY(y); setRsW(width); setRsH(height); bringResumeToFront(); }}
                 onFocus={bringResumeToFront}
                 zIndex={zResume}
+              />
+            )}
+
+            {/* Social Window */}
+            {socialMounted && (
+              <SocialWindow
+                onClose={handleSocialClose}
+                // On mobile: only close button (omit minimize/maximize)
+                onMinimize={!isMobile ? handleSocialMinimize : undefined}
+                onToggleMaximize={!isMobile ? handleSocialToggleMax : undefined}
+                isMaximized={socialMaximized}
+                visible={socialVisible}
+                x={scX} y={scY} width={scW} height={scH}
+                onMove={(x,y) => { setScX(x); setScY(y); bringSocialToFront(); }}
+                onResize={({ width, height, x, y }) => { if (x!==undefined) setScX(x); if (y!==undefined) setScY(y); setScW(width); setScH(height); bringSocialToFront(); }}
+                onFocus={bringSocialToFront}
+                zIndex={zSocial}
               />
             )}
           </themeContext.Provider>

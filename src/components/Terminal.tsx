@@ -221,7 +221,7 @@ const Terminal = () => {
           executeCommand,
         };
         return (
-          <div key={_.uniqueId(`${cmdH}_`)}>
+          <div key={index}>
             <div>
               <TermInfo />
               <MobileBr />
