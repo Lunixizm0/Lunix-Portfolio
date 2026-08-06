@@ -313,7 +313,7 @@ function App() {
       <h1 className="sr-only" aria-label="Utku Ceylan">Utku Ceylan</h1>
       {themeLoaded && (
         <ThemeProvider theme={selectedTheme}>
-          <GlobalStyle />
+          <GlobalStyle theme={selectedTheme} />
           <themeContext.Provider value={themeSwitcher}>
             {/* Desktop Icons - below windows, hidden when any window is maximized */}
             <DesktopShortcuts
