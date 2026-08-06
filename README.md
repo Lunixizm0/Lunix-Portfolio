@@ -33,8 +33,8 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 Prerequisites: Node.js and [pnpm](https://pnpm.io/installation).
 
 ```bash
-# install dependencies
-pnpm install
+# install dependencies 
+pnpm install --frozen-lockfile
 
 # start the dev server (http://localhost:8001)
 pnpm dev
