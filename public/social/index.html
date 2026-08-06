@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="icon" href="/favicon.webp" type="image/webp">
 
-  <title>Social / Rule 86: If it exists, it can play Bad Apple</title>
+  <title>Social</title>
   <meta name="description" content="Utku Ceylan — Okul saatlerim. Bu sayfa canlıdır: şu an müsait miyim, ne kadar süre müsaitim onu gösterir.">
   <meta name="author" content="Utku Ceylan">
   <meta name="theme-color" content="#0a0a0a">
@@ -98,7 +98,20 @@
       width: 100% !important;
       height: 100% !important;
       border: 0;
-      pointer-events: none;
+      pointer-events: none !important;
+    }
+
+    /* Video modunda ekrana gelen tıklamaları YouTube iframe'ine ulaştırmadan yutar */
+    #videoClickCatcher {
+      display: none;
+    }
+
+    body.video-only #videoClickCatcher {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      cursor: default;
     }
 
     /* ── Ana kapsayıcı ── */
@@ -942,7 +955,16 @@
       font-weight: 500;
     }
 
-    .unmute-hint {
+    /* ── Video modu (sadece video) ── */
+    body.video-only .main-wrapper {
+      display: none;
+    }
+
+    body.video-only .video-container::after {
+      display: none;
+    }
+
+    .video-mode-btn {
       position: fixed;
       bottom: 80px;
       right: 20px;
@@ -953,33 +975,36 @@
       padding: 10px 16px;
       color: rgba(255, 255, 255, 0.8);
       font-size: 13px;
+      font-family: inherit;
       display: flex;
       align-items: center;
       gap: 8px;
       z-index: 99;
-      animation: fadeInHint 0.5s ease, pulseHint 2s ease-in-out infinite;
       cursor: pointer;
+      animation: fadeInHint 0.5s ease;
+      transition: all 0.3s ease;
     }
 
-    .unmute-hint svg {
+    .video-mode-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+    }
+
+    .video-mode-btn.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+    }
+
+    .video-mode-btn svg {
       width: 16px;
       height: 16px;
-    }
-
-    .unmute-hint.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(10px);
     }
 
     @keyframes fadeInHint {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulseHint {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2); }
-      50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
     }
 
     @media (max-width: 480px) {
@@ -998,7 +1023,7 @@
         height: 16px;
       }
 
-      .unmute-hint {
+      .video-mode-btn {
         bottom: 70px;
         right: 16px;
         font-size: 12px;
@@ -1014,6 +1039,9 @@
       <div id="bgPlayer"></div>
     </div>
   </div>
+
+  <!-- Tıklama yakalayıcı: video modunda ikon çıkmasını engeller -->
+  <div id="videoClickCatcher" aria-hidden="true"></div>
 
   <!-- Ana İçerik -->
   <div class="main-wrapper">
@@ -1112,13 +1140,13 @@
     </div>
   </div>
 
-  <!-- Ses Aç İpucu -->
-  <div class="unmute-hint" id="unmuteHint">
+  <!-- Video Modu Butonu (sadece video görünümü) -->
+  <button class="video-mode-btn" id="videoModeBtn" type="button" aria-label="Videoyu göster veya gizle">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
     </svg>
-    <span>Sesi açmak için tıklayın</span>
-  </div>
+    <span class="vmb-label">Videoyu göster</span>
+  </button>
 
   <!-- Ses Kontrolleri -->
   <div class="sound-controls" id="soundControls">
@@ -1135,13 +1163,17 @@
   </div>
 
   <script>
-    // Bad Apple!! PV (shadow art) — Rule 86: If it exists, it can play Bad Apple
-    const VIDEO_ID = 'FtutLA63Cp8';
+    // Arka plan videosu cihaza göre değişir:
+    //   mobil  → Bad Apple!! PV (shadow art) — Rule 86: If it exists, it can play Bad Apple
+    //   masaüstü → seçili YouTube videosu
+    const IS_MOBIL = window.matchMedia('(max-width: 768px)').matches;
+    const VIDEO_ID = IS_MOBIL ? 'FtutLA63Cp8' : '30jrmzzgHLc';
+    document.title = IS_MOBIL ? 'Social / Rule 86: If it exists, it can play Bad Apple' : 'Social';
 
     const soundBtn = document.getElementById('soundBtn');
     const volumeSlider = document.getElementById('volumeSlider');
     const volumePercent = document.getElementById('volumePercent');
-    const unmuteHint = document.getElementById('unmuteHint');
+    const videoModeBtn = document.getElementById('videoModeBtn');
     const soundControls = document.getElementById('soundControls');
 
     let isMuted = true;
@@ -1187,7 +1219,12 @@
 
     function onPlayerError() {
       soundControls.style.display = 'none';
-      unmuteHint.style.display = 'none';
+    }
+
+    function toggleVideoMode() {
+      const active = document.body.classList.toggle('video-only');
+      videoModeBtn.classList.toggle('active', active);
+      videoModeBtn.querySelector('.vmb-label').textContent = active ? 'Videoyu gizle' : 'Videoyu göster';
     }
 
     function enableSound() {
@@ -1197,8 +1234,6 @@
       player.setVolume(Math.round(currentVolume * 100));
       player.playVideo();
       soundBtn.classList.remove('muted');
-      unmuteHint.classList.add('hidden');
-      setTimeout(() => { unmuteHint.style.display = 'none'; }, 500);
     }
 
     function toggleSound() {
@@ -1212,7 +1247,6 @@
         player.setVolume(Math.round(currentVolume * 100));
         player.playVideo();
         soundBtn.classList.remove('muted');
-        unmuteHint.classList.add('hidden');
       }
     }
 
@@ -1224,7 +1258,6 @@
         isMuted = false;
         if (playerReady) player.unMute();
         soundBtn.classList.remove('muted');
-        unmuteHint.classList.add('hidden');
       }
       if (currentVolume === 0) {
         soundBtn.classList.add('muted');
@@ -1233,7 +1266,7 @@
 
     soundBtn.addEventListener('click', toggleSound);
     volumeSlider.addEventListener('input', () => changeVolume(volumeSlider.value));
-    unmuteHint.addEventListener('click', enableSound);
+    videoModeBtn.addEventListener('click', toggleVideoMode);
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.sound-controls')) enableSound();

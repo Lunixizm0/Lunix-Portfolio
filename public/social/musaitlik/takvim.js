@@ -303,7 +303,9 @@ export function seoUygula(cfg, d) {
   else if (d.bugunSonraCalisma) sonrakiMetin = `${yerelSaatStr(d.basAn)}'a kadar müsaitim.`;
   else if (d.sonraki) sonrakiMetin = `Sonraki okul: ${tarihMetni(cfg, d.sonraki.iso)} ${yerelSaatStr(d.sonraki.an)}.`;
 
-  const baslik = (s.baslikKalibi || '{durum} · {ad}')
+  const baslik = ((window.matchMedia('(max-width: 768px)').matches
+    ? s.baslikKalibiMobil
+    : s.baslikKalibi) || '{durum} · {ad}')
     .replace('{durum}', durumMetni).replace('{ad}', cfg.kisi.ad);
   const aciklama = (s.aciklamaKalibi || '')
     .replace('{ad}', cfg.kisi.ad)
