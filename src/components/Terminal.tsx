@@ -45,13 +45,8 @@ export const commands: Command = [
   { cmd: "ls", desc: "list directory contents", tab: 11 },
 ];
 
-// easter-egg commands 
-export const hiddenCommands = [
-  "sudo",
-  "neofetch",
-  "uname",
-  "ls",
-];
+// easter-egg commands
+export const hiddenCommands = ["sudo", "neofetch", "uname", "ls"];
 
 type Term = {
   arg: string[];
@@ -168,7 +163,8 @@ const Terminal = () => {
     if (e.key === "ArrowUp") {
       if (cmdHistory.length === 0) return;
 
-      const nextIndex = histIndex === null ? cmdHistory.length - 1 : Math.max(0, histIndex - 1);
+      const nextIndex =
+        histIndex === null ? cmdHistory.length - 1 : Math.max(0, histIndex - 1);
       setHistIndex(nextIndex);
       setInputVal(cmdHistory[nextIndex]);
       inputRef?.current?.blur();
@@ -228,7 +224,7 @@ const Terminal = () => {
               <MobileSpan>&#62;</MobileSpan>
               <span data-testid="input-command">{cmdH}</span>
             </div>
-            {(validCommand || hiddenCommands.includes(commandArray[0])) ? (
+            {validCommand || hiddenCommands.includes(commandArray[0]) ? (
               <termContext.Provider value={contextValue}>
                 <Output index={index} cmd={commandArray[0]} />
               </termContext.Provider>

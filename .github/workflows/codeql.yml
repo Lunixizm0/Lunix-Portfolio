@@ -14,7 +14,7 @@ permissions:
   contents: read
   security-events: write
 
-# Aynı branş için eski çalışmayı iptal et 
+# Aynı branş için eski çalışmayı iptal et
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true

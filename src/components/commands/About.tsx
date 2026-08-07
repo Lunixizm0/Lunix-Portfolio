@@ -11,11 +11,11 @@ const About: React.FC = () => {
         Hi, my name is <HighlightSpan>Utku Ceylan</HighlightSpan>.
       </p>
       <p>
-        I'm a <HighlightAlt>Junior Security Researcher & Team Leader</HighlightAlt> based in Turkey.
+        I'm a{" "}
+        <HighlightAlt>Junior Security Researcher & Team Leader</HighlightAlt>{" "}
+        based in Turkey.
       </p>
-      <p>
-        I am passionate about security research in large ecosystems.
-      </p>
+      <p>I am passionate about security research in large ecosystems.</p>
     </AboutWrapper>
   );
 };

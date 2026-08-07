@@ -14,7 +14,7 @@ import { termContext } from "../Terminal";
 import Usage from "../Usage";
 
 const Projects: React.FC = () => {
-  const { arg, history, index, rerender, executeCommand } = useContext(termContext);
+  const { arg, history, index, rerender } = useContext(termContext);
 
   /* ===== get current command ===== */
   const currentCommand = getCurrentCmdArry(history[index]);
@@ -61,7 +61,7 @@ const Projects: React.FC = () => {
         <ProjectContainer key={id}>
           <ProjectTitle
             onClick={() => handleProjectClick(id, url)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             {`${id}. ${title}`}
           </ProjectTitle>
@@ -98,7 +98,7 @@ const projects = [
     title: "Lunix-Portfolio",
     desc: "This interactive terminal-style portfolio & social hub (the site you're on right now).",
     url: "https://github.com/Lunixizm0/Lunix-Portfolio",
-  }
+  },
 ];
 
 export default Projects;
