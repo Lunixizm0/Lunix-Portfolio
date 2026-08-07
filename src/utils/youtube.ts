@@ -22,6 +22,7 @@ export type YTNamespace = {
     id: string | HTMLElement,
     opts: {
       videoId: string;
+      host?: string;
       playerVars?: Record<string, number | string>;
       events?: YTPlayerEvents;
     }

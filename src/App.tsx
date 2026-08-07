@@ -86,10 +86,10 @@ function App() {
   }, []);
   // Auto-enter fullscreen on load (best-effort; some browsers require gesture)
   useEffect(() => {
-    if (themeLoaded) {
+    if (themeLoaded && isMobile) {
       requestFullscreen();
     }
-  }, [themeLoaded]);
+  }, [themeLoaded, isMobile]);
 
   // Terminal window state
   const [terminalMounted, setTerminalMounted] = useState(false);

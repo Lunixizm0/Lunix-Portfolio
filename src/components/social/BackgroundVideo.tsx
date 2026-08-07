@@ -17,7 +17,9 @@ type Props = {
 };
 
 const VIDEO_ID_MOBIL = "FtutLA63Cp8"; // Bad Apple!! PV (Rule 86)
-const VIDEO_ID_MASAUSTU = "30jrmzzgHLc";
+const VIDEO_ID_MASAUSTU = "30jrmzzgHLc"; // Literally me
+
+const HOST_NOCOOKIE = "https://www.youtube-nocookie.com";
 
 const BackgroundVideo: React.FC<Props> = ({ videoOnly, onToggleVideoMode }) => {
   const playerWrapRef = useRef<HTMLDivElement>(null);
@@ -37,6 +39,7 @@ const BackgroundVideo: React.FC<Props> = ({ videoOnly, onToggleVideoMode }) => {
       if (iptal || !playerWrapRef.current) return;
       const player = new YT.Player(playerWrapRef.current, {
         videoId,
+        host: HOST_NOCOOKIE,
         playerVars: {
           autoplay: 1,
           controls: 0,
