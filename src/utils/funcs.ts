@@ -1,5 +1,4 @@
 import _ from "lodash";
-import theme from "../components/styles/themes";
 
 /**
  * Generates html tabs
@@ -66,9 +65,9 @@ export const checkRedirect = (
  * Theme switching is disabled in Kali-only mode
  */
 export const checkThemeSwitch = (
-  rerender: boolean,
-  currentCommand: string[],
-  themes: string[]
+  _rerender: boolean,
+  _currentCommand: string[],
+  _themes: string[]
 ): boolean => false;
 
 /**

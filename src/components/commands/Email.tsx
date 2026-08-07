@@ -27,9 +27,9 @@ const Email: React.FC = () => {
       <span
         onClick={handleEmailClick}
         style={{
-          cursor: 'pointer',
-          textDecoration: 'underline',
-          color: 'inherit'
+          cursor: "pointer",
+          textDecoration: "underline",
+          color: "inherit",
         }}
       >
         portfolio@lunixizm.website

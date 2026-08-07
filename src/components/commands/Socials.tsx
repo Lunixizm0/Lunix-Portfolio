@@ -11,15 +11,21 @@ import { termContext } from "../Terminal";
 import Usage from "../Usage";
 
 const Socials: React.FC = () => {
-  const { arg, history, index, rerender, executeCommand } = useContext(termContext);
+  const { arg, history, index, rerender } = useContext(termContext);
 
   /* ===== get current command ===== */
   const currentCommand = getCurrentCmdArry(history[index]);
 
   /* ===== open the Social desktop app window ===== */
   useEffect(() => {
-    if (rerender && history[index] === "socials" && index === history.length - 1) {
-      document.dispatchEvent(new CustomEvent('open-social', { detail: { index } }));
+    if (
+      rerender &&
+      history[index] === "socials" &&
+      index === history.length - 1
+    ) {
+      document.dispatchEvent(
+        new CustomEvent("open-social", { detail: { index } })
+      );
     }
   }, [rerender, history, index]);
 
@@ -49,9 +55,7 @@ const Socials: React.FC = () => {
 
   /* ===== check arg is valid ===== */
   const checkArg = () =>
-    isArgInvalid(arg, "go", ["1", "2", "3"]) ? (
-      <Usage cmd="socials" />
-    ) : null;
+    isArgInvalid(arg, "go", ["1", "2", "3"]) ? <Usage cmd="socials" /> : null;
 
   return arg.length > 0 || arg.length > 2 ? (
     checkArg()
@@ -62,7 +66,7 @@ const Socials: React.FC = () => {
         <CmdList key={title}>
           <Cmd
             onClick={() => handleSocialClick(url)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             {`${id}. ${title}`}
           </Cmd>

@@ -13,6 +13,18 @@ export const themeContext = createContext<
   ((switchTheme: DefaultTheme) => void) | null
 >(null);
 
+type VendorDocument = Document & {
+  webkitExitFullscreen?: () => Promise<void>;
+  msExitFullscreen?: () => Promise<void>;
+  webkitFullscreenElement?: Element | null;
+  msFullscreenElement?: Element | null;
+};
+
+type VendorElement = Element & {
+  webkitRequestFullscreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
+};
+
 function App() {
   // themes
   const { theme, themeLoaded, setMode } = useTheme();
@@ -21,42 +33,55 @@ function App() {
   // Device detection
   const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
+    const mq = window.matchMedia("(max-width: 768px)");
     const update = () => setIsMobile(mq.matches);
     update();
-    mq.addEventListener?.('change', update);
-    return () => mq.removeEventListener?.('change', update);
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
   }, []);
 
   // Fullscreen state
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const requestFullscreen = async () => {
-    const el: any = document.documentElement;
+    const el = document.documentElement as VendorElement;
     try {
-      if (!document.fullscreenElement && el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      else if ((el as any).msRequestFullscreen) await (el as any).msRequestFullscreen();
-    } catch {}
+      if (!document.fullscreenElement && el.requestFullscreen)
+        await el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) await el.msRequestFullscreen();
+    } catch {
+      // some browsers require a user gesture before entering fullscreen
+    }
   };
   const exitFullscreen = async () => {
+    const doc = document as VendorDocument;
     try {
       if (document.exitFullscreen) await document.exitFullscreen();
-      else if ((document as any).webkitExitFullscreen) await (document as any).webkitExitFullscreen();
-      else if ((document as any).msExitFullscreen) await (document as any).msExitFullscreen();
-    } catch {}
+      else if (doc.webkitExitFullscreen) await doc.webkitExitFullscreen();
+      else if (doc.msExitFullscreen) await doc.msExitFullscreen();
+    } catch {
+      // exit fullscreen can fail if no request was ever granted
+    }
   };
   const toggleFullscreen = async () => {
-    if (!isFullscreen) await requestFullscreen(); else await exitFullscreen();
+    if (!isFullscreen) await requestFullscreen();
+    else await exitFullscreen();
   };
   useEffect(() => {
-    const onChange = () => setIsFullscreen(!!document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).msFullscreenElement);
-    document.addEventListener('fullscreenchange', onChange);
-    document.addEventListener('webkitfullscreenchange', onChange as any);
-    document.addEventListener('msfullscreenchange', onChange as any);
+    const doc = document as VendorDocument;
+    const onChange = () =>
+      setIsFullscreen(
+        !!document.fullscreenElement ||
+          !!doc.webkitFullscreenElement ||
+          !!doc.msFullscreenElement
+      );
+    document.addEventListener("fullscreenchange", onChange);
+    document.addEventListener("webkitfullscreenchange", onChange);
+    document.addEventListener("msfullscreenchange", onChange);
     return () => {
-      document.removeEventListener('fullscreenchange', onChange);
-      document.removeEventListener('webkitfullscreenchange', onChange as any);
-      document.removeEventListener('msfullscreenchange', onChange as any);
+      document.removeEventListener("fullscreenchange", onChange);
+      document.removeEventListener("webkitfullscreenchange", onChange);
+      document.removeEventListener("msfullscreenchange", onChange);
     };
   }, []);
   // Auto-enter fullscreen on load (best-effort; some browsers require gesture)
@@ -98,10 +123,26 @@ function App() {
   const [zTerminal, setZTerminal] = useState(300);
   const [zResume, setZResume] = useState(400);
   const [zSocial, setZSocial] = useState(450);
-  const bringBrowserToFront = () => { const next = zTop + 1; setZTop(next); setZBrowser(next); };
-  const bringTerminalToFront = () => { const next = zTop + 1; setZTop(next); setZTerminal(next); };
-  const bringResumeToFront = () => { const next = zTop + 1; setZTop(next); setZResume(next); };
-  const bringSocialToFront = () => { const next = zTop + 1; setZTop(next); setZSocial(next); };
+  const bringBrowserToFront = () => {
+    const next = zTop + 1;
+    setZTop(next);
+    setZBrowser(next);
+  };
+  const bringTerminalToFront = () => {
+    const next = zTop + 1;
+    setZTop(next);
+    setZTerminal(next);
+  };
+  const bringResumeToFront = () => {
+    const next = zTop + 1;
+    setZTop(next);
+    setZResume(next);
+  };
+  const bringSocialToFront = () => {
+    const next = zTop + 1;
+    setZTop(next);
+    setZSocial(next);
+  };
   const [wbX, setWbX] = useState(140);
   const [wbY, setWbY] = useState(60);
   const [wbW, setWbW] = useState(900);
@@ -136,8 +177,10 @@ function App() {
       setWelcomeVisible(true);
       setWelcomeMaximized(false);
       // Center browser on desktop startup
-      const ww = window.innerWidth, wh = window.innerHeight;
-      const w = wbW, h = wbH;
+      const ww = window.innerWidth,
+        wh = window.innerHeight;
+      const w = wbW,
+        h = wbH;
       setWbX(Math.max(0, Math.round((ww - w) / 2)));
       setWbY(Math.max(0, Math.round((wh - h) / 2)));
       bringBrowserToFront();
@@ -165,8 +208,8 @@ function App() {
         bringResumeToFront();
       }
     };
-    document.addEventListener('open-resume', handler);
-    return () => document.removeEventListener('open-resume', handler);
+    document.addEventListener("open-resume", handler);
+    return () => document.removeEventListener("open-resume", handler);
   });
 
   // Listen for open-social events from terminal command
@@ -182,8 +225,8 @@ function App() {
         bringSocialToFront();
       }
     };
-    document.addEventListener('open-social', handler);
-    return () => document.removeEventListener('open-social', handler);
+    document.addEventListener("open-social", handler);
+    return () => document.removeEventListener("open-social", handler);
   });
 
   // Disable browser's default behavior
@@ -206,7 +249,9 @@ function App() {
     const themeColor = theme.colors?.body;
     const metaThemeColor = document.querySelector("meta[name='theme-color']");
     const maskIcon = document.querySelector("link[rel='mask-icon']");
-    const metaMsTileColor = document.querySelector("meta[name='msapplication-TileColor']");
+    const metaMsTileColor = document.querySelector(
+      "meta[name='msapplication-TileColor']"
+    );
     metaThemeColor && metaThemeColor.setAttribute("content", themeColor);
     metaMsTileColor && metaMsTileColor.setAttribute("content", themeColor);
     maskIcon && maskIcon.setAttribute("color", themeColor);
@@ -218,8 +263,15 @@ function App() {
   };
 
   // Terminal handlers
-  const handleClose = () => { setTerminalMounted(false); setTerminalVisible(false); setTerminalMaximized(false); };
-  const handleMinimize = () => { setTerminalVisible(false); setTerminalMaximized(false); };
+  const handleClose = () => {
+    setTerminalMounted(false);
+    setTerminalVisible(false);
+    setTerminalMaximized(false);
+  };
+  const handleMinimize = () => {
+    setTerminalVisible(false);
+    setTerminalMaximized(false);
+  };
   const handleOpenFromShortcut = () => {
     if (isMobile) {
       // Force maximized on mobile
@@ -230,19 +282,31 @@ function App() {
       return;
     }
     // center on open (desktop)
-    const ww = window.innerWidth, wh = window.innerHeight;
-    const w = winW, h = winH;
+    const ww = window.innerWidth,
+      wh = window.innerHeight;
+    const w = winW,
+      h = winH;
     setWinX(Math.max(0, Math.round((ww - w) / 2)));
     setWinY(Math.max(0, Math.round((wh - h) / 2)));
     if (!terminalMounted) setTerminalMounted(true);
     setTerminalVisible(true);
     bringTerminalToFront();
   };
-  const handleToggleMaximize = () => { setTerminalMaximized(prev => !prev); setTerminalVisible(true); };
+  const handleToggleMaximize = () => {
+    setTerminalMaximized(prev => !prev);
+    setTerminalVisible(true);
+  };
 
   // Resume window handlers
-  const handleResumeClose = () => { setResumeMounted(false); setResumeVisible(false); setResumeMaximized(false); };
-  const handleResumeMinimize = () => { setResumeVisible(false); setResumeMaximized(false); };
+  const handleResumeClose = () => {
+    setResumeMounted(false);
+    setResumeVisible(false);
+    setResumeMaximized(false);
+  };
+  const handleResumeMinimize = () => {
+    setResumeVisible(false);
+    setResumeMaximized(false);
+  };
   const handleOpenResume = () => {
     if (isMobile) {
       setResumeMounted(true);
@@ -251,7 +315,8 @@ function App() {
       bringResumeToFront();
       return;
     }
-    const ww = window.innerWidth, wh = window.innerHeight;
+    const ww = window.innerWidth,
+      wh = window.innerHeight;
     setRsX(0);
     setRsY(0);
     setRsW(ww);
@@ -261,11 +326,21 @@ function App() {
     setResumeMaximized(true);
     bringResumeToFront();
   };
-  const handleResumeToggleMax = () => { setResumeMaximized(p => !p); setResumeVisible(true); };
+  const handleResumeToggleMax = () => {
+    setResumeMaximized(p => !p);
+    setResumeVisible(true);
+  };
 
   // Social window handlers
-  const handleSocialClose = () => { setSocialMounted(false); setSocialVisible(false); setSocialMaximized(false); };
-  const handleSocialMinimize = () => { setSocialVisible(false); setSocialMaximized(false); };
+  const handleSocialClose = () => {
+    setSocialMounted(false);
+    setSocialVisible(false);
+    setSocialMaximized(false);
+  };
+  const handleSocialMinimize = () => {
+    setSocialVisible(false);
+    setSocialMaximized(false);
+  };
   const handleOpenSocial = () => {
     if (isMobile) {
       setSocialMounted(true);
@@ -274,8 +349,10 @@ function App() {
       bringSocialToFront();
       return;
     }
-    const ww = window.innerWidth, wh = window.innerHeight;
-    const w = scW, h = scH;
+    const ww = window.innerWidth,
+      wh = window.innerHeight;
+    const w = scW,
+      h = scH;
     setScX(Math.max(0, Math.round((ww - w) / 2)));
     setScY(Math.max(0, Math.round((wh - h) / 2)));
     if (!socialMounted) setSocialMounted(true);
@@ -283,11 +360,21 @@ function App() {
     setSocialMaximized(true);
     bringSocialToFront();
   };
-  const handleSocialToggleMax = () => { setSocialMaximized(p => !p); setSocialVisible(true); };
+  const handleSocialToggleMax = () => {
+    setSocialMaximized(p => !p);
+    setSocialVisible(true);
+  };
 
   // Welcome window handlers
-  const handleWelcomeClose = () => { setWelcomeMounted(false); setWelcomeVisible(false); setWelcomeMaximized(false); };
-  const handleWelcomeMinimize = () => { setWelcomeVisible(false); setWelcomeMaximized(false); };
+  const handleWelcomeClose = () => {
+    setWelcomeMounted(false);
+    setWelcomeVisible(false);
+    setWelcomeMaximized(false);
+  };
+  const handleWelcomeMinimize = () => {
+    setWelcomeVisible(false);
+    setWelcomeMaximized(false);
+  };
   const handleOpenWelcome = () => {
     if (isMobile) {
       // Force maximized on mobile
@@ -298,19 +385,26 @@ function App() {
       return;
     }
     // Center on open (desktop)
-    const ww = window.innerWidth, wh = window.innerHeight;
-    const w = wbW, h = wbH;
+    const ww = window.innerWidth,
+      wh = window.innerHeight;
+    const w = wbW,
+      h = wbH;
     setWbX(Math.max(0, Math.round((ww - w) / 2)));
     setWbY(Math.max(0, Math.round((wh - h) / 2)));
     if (!welcomeMounted) setWelcomeMounted(true);
     setWelcomeVisible(true);
     bringBrowserToFront();
   };
-  const handleWelcomeToggleMax = () => { setWelcomeMaximized(p => !p); setWelcomeVisible(true); };
+  const handleWelcomeToggleMax = () => {
+    setWelcomeMaximized(p => !p);
+    setWelcomeVisible(true);
+  };
 
   return (
     <>
-      <h1 className="sr-only" aria-label="Utku Ceylan">Utku Ceylan</h1>
+      <h1 className="sr-only" aria-label="Utku Ceylan">
+        Utku Ceylan
+      </h1>
       {themeLoaded && (
         <ThemeProvider theme={selectedTheme}>
           <GlobalStyle theme={selectedTheme} />
@@ -321,7 +415,12 @@ function App() {
               onOpenWelcome={handleOpenWelcome}
               onOpenResume={handleOpenResume}
               onOpenSocial={handleOpenSocial}
-              hidden={terminalMaximized || welcomeMaximized || resumeMaximized || socialMaximized}
+              hidden={
+                terminalMaximized ||
+                welcomeMaximized ||
+                resumeMaximized ||
+                socialMaximized
+              }
               activeTerminal={!isMobile && terminalMounted && terminalVisible}
               activeBrowser={!isMobile && welcomeMounted && welcomeVisible}
               activeResume={!isMobile && resumeMounted && resumeVisible}
@@ -333,7 +432,12 @@ function App() {
             <FullscreenToggle
               isFullscreen={isFullscreen}
               onToggle={toggleFullscreen}
-              hidden={terminalMaximized || welcomeMaximized || resumeMaximized || socialMaximized}
+              hidden={
+                terminalMaximized ||
+                welcomeMaximized ||
+                resumeMaximized ||
+                socialMaximized
+              }
             />
 
             {/* Welcome Browser Window opens on start on desktop only */}
@@ -341,12 +445,27 @@ function App() {
               <WelcomeBrowserWindow
                 onClose={handleWelcomeClose}
                 onMinimize={!isMobile ? handleWelcomeMinimize : undefined}
-                onToggleMaximize={!isMobile ? handleWelcomeToggleMax : undefined}
+                onToggleMaximize={
+                  !isMobile ? handleWelcomeToggleMax : undefined
+                }
                 isMaximized={welcomeMaximized}
                 visible={welcomeVisible}
-                x={wbX} y={wbY} width={wbW} height={wbH}
-                onMove={(x,y) => { setWbX(x); setWbY(y); bringBrowserToFront(); }}
-                onResize={({ width, height, x, y }) => { if (x!==undefined) setWbX(x); if (y!==undefined) setWbY(y); setWbW(width); setWbH(height); bringBrowserToFront(); }}
+                x={wbX}
+                y={wbY}
+                width={wbW}
+                height={wbH}
+                onMove={(x, y) => {
+                  setWbX(x);
+                  setWbY(y);
+                  bringBrowserToFront();
+                }}
+                onResize={({ width, height, x, y }) => {
+                  if (x !== undefined) setWbX(x);
+                  if (y !== undefined) setWbY(y);
+                  setWbW(width);
+                  setWbH(height);
+                  bringBrowserToFront();
+                }}
                 onFocus={bringBrowserToFront}
                 zIndex={zBrowser}
                 onOpenResume={handleOpenResume}
@@ -362,9 +481,22 @@ function App() {
                 onToggleMaximize={!isMobile ? handleToggleMaximize : undefined}
                 isMaximized={terminalMaximized}
                 visible={terminalVisible}
-                x={winX} y={winY} width={winW} height={winH}
-                onMove={(x, y) => { setWinX(x); setWinY(y); bringTerminalToFront(); }}
-                onResize={({ width, height, x, y }) => { if (x !== undefined) setWinX(x); if (y !== undefined) setWinY(y); setWinW(width); setWinH(height); bringTerminalToFront(); }}
+                x={winX}
+                y={winY}
+                width={winW}
+                height={winH}
+                onMove={(x, y) => {
+                  setWinX(x);
+                  setWinY(y);
+                  bringTerminalToFront();
+                }}
+                onResize={({ width, height, x, y }) => {
+                  if (x !== undefined) setWinX(x);
+                  if (y !== undefined) setWinY(y);
+                  setWinW(width);
+                  setWinH(height);
+                  bringTerminalToFront();
+                }}
                 onFocus={bringTerminalToFront}
                 zIndex={zTerminal}
               />
@@ -379,9 +511,22 @@ function App() {
                 onToggleMaximize={!isMobile ? handleResumeToggleMax : undefined}
                 isMaximized={resumeMaximized}
                 visible={resumeVisible}
-                x={rsX} y={rsY} width={rsW} height={rsH}
-                onMove={(x,y) => { setRsX(x); setRsY(y); bringResumeToFront(); }}
-                onResize={({ width, height, x, y }) => { if (x!==undefined) setRsX(x); if (y!==undefined) setRsY(y); setRsW(width); setRsH(height); bringResumeToFront(); }}
+                x={rsX}
+                y={rsY}
+                width={rsW}
+                height={rsH}
+                onMove={(x, y) => {
+                  setRsX(x);
+                  setRsY(y);
+                  bringResumeToFront();
+                }}
+                onResize={({ width, height, x, y }) => {
+                  if (x !== undefined) setRsX(x);
+                  if (y !== undefined) setRsY(y);
+                  setRsW(width);
+                  setRsH(height);
+                  bringResumeToFront();
+                }}
                 onFocus={bringResumeToFront}
                 zIndex={zResume}
               />
@@ -396,9 +541,22 @@ function App() {
                 onToggleMaximize={!isMobile ? handleSocialToggleMax : undefined}
                 isMaximized={socialMaximized}
                 visible={socialVisible}
-                x={scX} y={scY} width={scW} height={scH}
-                onMove={(x,y) => { setScX(x); setScY(y); bringSocialToFront(); }}
-                onResize={({ width, height, x, y }) => { if (x!==undefined) setScX(x); if (y!==undefined) setScY(y); setScW(width); setScH(height); bringSocialToFront(); }}
+                x={scX}
+                y={scY}
+                width={scW}
+                height={scH}
+                onMove={(x, y) => {
+                  setScX(x);
+                  setScY(y);
+                  bringSocialToFront();
+                }}
+                onResize={({ width, height, x, y }) => {
+                  if (x !== undefined) setScX(x);
+                  if (y !== undefined) setScY(y);
+                  setScW(width);
+                  setScH(height);
+                  bringSocialToFront();
+                }}
                 onFocus={bringSocialToFront}
                 zIndex={zSocial}
               />
