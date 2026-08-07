@@ -16,7 +16,7 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 - **Resume window** — in-app PDF viewer with download button.
 - **Social hub** — a live "am I available?" window:
   - Status computed from the weekly schedule in `public/musaitlik.json` (school hours Mon–Fri 09:00–17:00, everything else = available), shown in the visitor's own timezone.
-  - Fullscreen video background streamed from YouTube with muted autoplay, sound controls, and a "video-only" mode toggle that hides everything but the video and the sound bar: **Bad Apple!!** PV (Rule 86: *"If it exists, it can play Bad Apple"*) on mobile, a selected desktop video on larger screens.
+  - Fullscreen video background streamed from YouTube with muted autoplay, sound controls, and a "video-only" mode toggle that hides everything but the video and the sound bar: **Bad Apple!!** PV (Rule 86: *"If it exists, it can play Bad Apple"*) on mobile, Ryan Gosling Drive Nightcall clip video on larger screens.
 - **Responsive** — on mobile the site switches to the browser window maximized, windows use dynamic viewport units (`dvh`) so they are never cut off behind Samsung-style browser menu bars, and the desktop wallpaper is replaced with a colorful gradient.
 
 ## Tech stack
