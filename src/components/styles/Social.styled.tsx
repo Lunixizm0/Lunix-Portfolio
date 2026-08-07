@@ -17,6 +17,7 @@ export const SocialRoot = styled.div`
   position: absolute;
   inset: 0;
   overflow: hidden;
+  isolation: isolate;
   background: #0a0a0a;
   color: #ffffff;
   font-family: ${font};
@@ -29,6 +30,11 @@ export const SocialRoot = styled.div`
 `;
 
 /* ── Video arka plan ── */
+/* z-index: -1 → video, SocialRoot'un stacking context'i içinde her şeyin
+   ARKASINDA kalır (eski public/social static sürümündeki .video-container
+   gibi). Böylece hiçbir dokunuş/tık iframe'e ulaşamaz: iOS Safari'de
+   iframe'lerde pointer-events: none çalışmaz (WebKit bug 154807) ve
+   playsinline YouTube video'ları dokunuşu yakalayıp videoyu durdurabilir. */
 export const VideoLayer = styled.div`
   position: absolute;
   top: 0;
@@ -36,6 +42,7 @@ export const VideoLayer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: -1;
   background: radial-gradient(
     120% 90% at 20% 10%,
     #1c2434 0%,

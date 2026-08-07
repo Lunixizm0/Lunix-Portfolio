@@ -115,20 +115,6 @@ const BackgroundVideo: React.FC<Props> = ({ videoOnly, onToggleVideoMode }) => {
     [muted]
   );
 
-  // İlk tıklamada ses aç (kontrol elemanlarına değilse)
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!(e.target as Element).closest(".sound-controls")) sesiAc();
-    };
-    const timeout = setTimeout(() => {
-      document.addEventListener("click", handler, { once: true });
-    }, 600);
-    return () => {
-      clearTimeout(timeout);
-      document.removeEventListener("click", handler);
-    };
-  }, [sesiAc]);
-
   return (
     <>
       <VideoLayer>
