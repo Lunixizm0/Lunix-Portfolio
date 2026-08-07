@@ -29,6 +29,7 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
     ${({ theme }) =>
       theme.backgroundImage &&
       `
+      background-color: #0c0c0c;
       background-image: url(${theme.backgroundImage});
       background-size: cover;
       background-position: center;
@@ -50,14 +51,23 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
   @media (max-width: 768px) {
     html {
       background-attachment: scroll;
+      background-color: #050508;
       background-image:
-        radial-gradient(at 15% 5%, rgba(0, 212, 255, 0.30) 0, transparent 55%),
-        radial-gradient(at 85% 15%, rgba(114, 9, 183, 0.55) 0, transparent 55%),
-        radial-gradient(at 70% 95%, rgba(247, 37, 133, 0.50) 0, transparent 55%),
-        linear-gradient(160deg, #0C0C1E 0%, #14142e 35%, #2a0a4a 70%, #3d0b34 100%);
+        radial-gradient(at 15% 5%, rgba(0, 212, 255, 0.12) 0, transparent 55%),
+        radial-gradient(at 85% 15%, rgba(114, 9, 183, 0.2) 0, transparent 55%),
+        radial-gradient(at 70% 95%, rgba(247, 37, 133, 0.16) 0, transparent 55%),
+        linear-gradient(160deg, #050508 0%, #0a0a14 35%, #14061f 70%, #1c0818 100%);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+    }
+  }
+
+  /* iOS Safari: background-attachment on the root element is buggy and can fail
+     to paint (white screen). Fall back to scroll on Apple touch devices. */
+  @supports (-webkit-touch-callout: none) {
+    html {
+      background-attachment: scroll;
     }
   }
 

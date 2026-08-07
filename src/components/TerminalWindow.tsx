@@ -138,6 +138,25 @@ const MenuItem = styled.span`
   `}
 `;
 
+const MobileNotice = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 24px;
+  text-align: center;
+  color: #eceff4;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  p {
+    margin: 0;
+    color: #d8dee9;
+    font-size: 15px;
+  }
+`;
+
 const TerminalContent = styled.div<{ maximized?: boolean }>`
   ${({ theme }) =>
     theme.backgroundImage &&
@@ -371,6 +390,21 @@ const TerminalWindow: React.FC<Props> = ({
     window.addEventListener("mouseup", onMouseUp);
   };
 
+  // Terminal is desktop-only: on mobile show a centered notice instead of the
+  // live terminal (which needs a real keyboard and is unusable on touch).
+  // Evaluated synchronously so <Terminal /> never mounts (and never focuses /
+  // pops the mobile keyboard) even for a single frame.
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    () => window.matchMedia("(max-width: 768px)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsMobileViewport(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
   return (
     <WindowFrame
       maximized={isMaximized}
@@ -463,7 +497,13 @@ const TerminalWindow: React.FC<Props> = ({
       </MenuBar>
 
       <TerminalContent maximized={isMaximized}>
-        <Terminal />
+        {isMobileViewport ? (
+          <MobileNotice>
+            <p>Terminal masaüstü için yapılmıştır.</p>
+          </MobileNotice>
+        ) : (
+          <Terminal />
+        )}
       </TerminalContent>
     </WindowFrame>
   );
