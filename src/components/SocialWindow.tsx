@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import SocialContent from "./social/SocialContent";
 
-// Social window: embeds the static müsaitlik (availability) app served from /social/
+// Social window: renders the müsaitlik (availability) UI natively (React port
+// of the old /social/ static app). Config is fetched from /musaitlik.json.
 
 type Props = {
   onClose: () => void;
@@ -149,17 +151,7 @@ const Content = styled.div<{ maximized?: boolean }>`
   height: ${({ maximized }) => (maximized ? "calc(100vh - 32px - 36px); height: calc(100dvh - 32px - 36px)" : "calc(100% - 32px - 36px)")};
   overflow: hidden;
   background: #0a0a0a;
-`;
-
-const IFrameContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  & iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
-  }
+  position: relative;
 `;
 
 // Resize handles
@@ -480,9 +472,7 @@ const SocialWindow: React.FC<Props> = ({
       </Toolbar>
 
       <Content maximized={isMaximized}>
-        <IFrameContainer>
-          <iframe src="/social/index.html" title="Social" />
-        </IFrameContainer>
+        <SocialContent />
       </Content>
     </Frame>
   );

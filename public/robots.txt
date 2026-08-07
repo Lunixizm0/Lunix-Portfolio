@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
 
-# The social/availability hub is a live app, not meant for search engines
-Disallow: /social
-Disallow: /social/
-
 Sitemap: https://lunixizm.website/sitemap.xml
