@@ -1,5 +1,4 @@
 name: "CodeQL"
-
 on:
   push:
     branches:
@@ -7,60 +6,52 @@ on:
   pull_request:
     branches:
       - "**"
-
 # least privilege
 permissions:
   actions: read
   contents: read
   security-events: write
-
 # Aynı branş için eski çalışmayı iptal et
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
-
 env:
   NODE_VERSION: "22"
   PNPM_VERSION: "10.16.1"
-
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    runs-on: self-hosted
-    timeout-minutes: 360
+    # Fork'tan gelen PR GitHub-hosted runner (self-hosteda untrusted kod düşmesin)
+    # Kendi push/PR self-hosted
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 60
     permissions:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
         language:
           - javascript-typescript
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
-          fetch-depth: 0
-
+          fetch-depth: 1
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-
       - name: Enable pnpm
         uses: pnpm/action-setup@v6
         with:
           version: ${{ env.PNPM_VERSION }}
-
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "store=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
       - name: Setup pnpm cache
         uses: actions/cache@v6
         with:
@@ -68,38 +59,33 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Audit dependencies
-        run: pnpm audit --prod
-
+        run: pnpm audit --prod --audit-level=high
       - name: Build project
         run: pnpm build
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # security-and-quality: kapsamlı; security-extended temeldir.
+          # security-and-quality: security-extended + code-quality query'lerini kapsar
           queries: security-and-quality
           config-file: .github/codeql/codeql-config.yml
           # JavaScript/TypeScript için derleme gerekmez (kaynak bazlı analiz)
           build-mode: none
           ram: 4096
           threads: 2
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
           ram: 4096
           threads: 2
-
+          output: sarif-results
       - name: Upload SARIF as artifact
         uses: actions/upload-artifact@v7
         with:
           name: codeql-sarif-${{ matrix.language }}
-          path: ${{ github.workspace }}/../results/${{ matrix.language }}.sarif
+          path: sarif-results/${{ matrix.language }}.sarif
           retention-days: 7
