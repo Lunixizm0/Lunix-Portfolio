@@ -125,7 +125,7 @@ export const Icons = {
       <path d="M22 12a10 10 0 10-11.5 9.95V14.9H7.9V12h2.6V9.8c0-2.57 1.54-3.99 3.9-3.99 1.13 0 2.33.2 2.33.2v2.56h-1.31c-1.29 0-1.69.8-1.69 1.63V12h2.88l-.46 2.9h-2.42v7.05A10 10 0 0022 12z" />
     </svg>
   ),
-  Blog: <img src="/dev-black.png" alt="dev.to logo" width="28" height="28" />,
+  Blog: <img src="/dev-black.webp" alt="dev.to logo" width="28" height="28" />,
   PDF: <img src="/pdf-icon.webp" alt="PDF icon" width="28" height="28" />,
   Social: (
     <svg
