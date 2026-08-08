@@ -7,6 +7,7 @@ import {
   PreWrapper,
 } from "../styles/Welcome.styled";
 import { termContext } from "../Terminal";
+import { t } from "../../i18n";
 
 const Welcome: React.FC = () => {
   const { executeCommand } = useContext(termContext);
@@ -55,11 +56,11 @@ const Welcome: React.FC = () => {
           </PreNameMobile>
         </PreWrapper>
         <div>
-          For a list of available commands, type `
+          {t("cmd.welcome.helpPrefix")}
           <Cmd onClick={handleHelpClick} style={{ cursor: "pointer" }}>
             help
           </Cmd>
-          `
+          {t("cmd.welcome.helpSuffix")}
         </div>
         <br />
       </div>

@@ -17,6 +17,7 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 - **Social hub** — a live "am I available?" window:
   - Status computed from the weekly schedule in `public/musaitlik.json` (school hours Mon–Fri 09:00–17:00, everything else = available), shown in the visitor's own timezone.
   - Fullscreen video background streamed from YouTube with muted autoplay, sound controls, and a "video-only" mode toggle that hides everything but the video and the sound bar: **Bad Apple!!** PV (Rule 86: *"If it exists, it can play Bad Apple"*) on mobile, Ryan Gosling Drive Nightcall clip video on larger screens.
+- **Bilingual** — the UI (terminal, resume, social hub) auto-detects the visitor's language (`navigator.language`): Turkish or English. English is the default; the Turkish social-hub copy in `public/musaitlik.json` is overlaid at render time, never rewritten.
 - **Responsive** — on mobile the site switches to the browser window maximized, windows use dynamic viewport units (`dvh`) so they are never cut off behind Samsung-style browser menu bars, and the desktop wallpaper is replaced with a colorful gradient.
 
 ## Tech stack
@@ -72,12 +73,12 @@ pnpm format:check  # prettier --check
 | `projects`    | view projects that I've coded                   |
 | `pwd`         | print current working directory                 |
 | `socials`     | open the social hub window                      |
-| `sudo`        | easter egg                                      |
+| `sudo`        | run programs with superuser privileges (easter egg) |
 | `welcome`     | display the hero section                        |
 | `whoami`      | about current user                              |
-| `neofetch`    | easter egg                                      |
-| `uname`       | easter egg                                      |
-| `ls`          | easter egg                                      |
+| `neofetch`    | display system information (easter egg)         |
+| `uname`       | display linux kernel information (easter egg)   |
+| `ls`          | list directory contents (easter egg)            |
 
 ### Shortcuts
 

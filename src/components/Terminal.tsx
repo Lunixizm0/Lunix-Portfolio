@@ -19,6 +19,7 @@ import {
   Wrapper,
 } from "./styles/Terminal.styled";
 import { argTab } from "../utils/funcs";
+import { t } from "../i18n";
 
 type Command = {
   cmd: string;
@@ -27,22 +28,22 @@ type Command = {
 }[];
 
 export const commands: Command = [
-  { cmd: "about", desc: "about Lunixizm", tab: 8 },
-  { cmd: "clear", desc: "clear the terminal", tab: 8 },
-  { cmd: "echo", desc: "print out anything", tab: 9 },
-  { cmd: "email", desc: "send me an email", tab: 8 },
-  { cmd: "resume", desc: "go to my resume", tab: 7 },
-  { cmd: "help", desc: "check available commands", tab: 9 },
-  { cmd: "history", desc: "view command history", tab: 6 },
-  { cmd: "projects", desc: "view projects that I've coded", tab: 5 },
-  { cmd: "pwd", desc: "print current working directory", tab: 10 },
-  { cmd: "socials", desc: "check out my socials", tab: 6 },
-  { cmd: "sudo", desc: "Run programs with superuser privileges", tab: 9 },
-  { cmd: "welcome", desc: "display hero section", tab: 6 },
-  { cmd: "whoami", desc: "about current user", tab: 7 },
-  { cmd: "neofetch", desc: "display system information", tab: 5 },
-  { cmd: "uname", desc: "display linux kernel information", tab: 8 },
-  { cmd: "ls", desc: "list directory contents", tab: 11 },
+  { cmd: "about", desc: t("terminal.cmd.about"), tab: 8 },
+  { cmd: "clear", desc: t("terminal.cmd.clear"), tab: 8 },
+  { cmd: "echo", desc: t("terminal.cmd.echo"), tab: 9 },
+  { cmd: "email", desc: t("terminal.cmd.email"), tab: 8 },
+  { cmd: "resume", desc: t("terminal.cmd.resume"), tab: 7 },
+  { cmd: "help", desc: t("terminal.cmd.help"), tab: 9 },
+  { cmd: "history", desc: t("terminal.cmd.history"), tab: 6 },
+  { cmd: "projects", desc: t("terminal.cmd.projects"), tab: 5 },
+  { cmd: "pwd", desc: t("terminal.cmd.pwd"), tab: 10 },
+  { cmd: "socials", desc: t("terminal.cmd.socials"), tab: 6 },
+  { cmd: "sudo", desc: t("terminal.cmd.sudo"), tab: 9 },
+  { cmd: "welcome", desc: t("terminal.cmd.welcome"), tab: 6 },
+  { cmd: "whoami", desc: t("terminal.cmd.whoami"), tab: 7 },
+  { cmd: "neofetch", desc: t("terminal.cmd.neofetch"), tab: 5 },
+  { cmd: "uname", desc: t("terminal.cmd.uname"), tab: 8 },
+  { cmd: "ls", desc: t("terminal.cmd.ls"), tab: 11 },
 ];
 
 // easter-egg commands
@@ -232,7 +233,7 @@ const Terminal = () => {
               <Empty />
             ) : (
               <CmdNotFound data-testid={`not-found-${index}`}>
-                command not found: {cmdH}
+                {t("terminal.notFound", { cmd: cmdH })}
               </CmdNotFound>
             )}
           </div>

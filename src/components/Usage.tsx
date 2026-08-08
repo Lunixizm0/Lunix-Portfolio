@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { UsageDiv } from "./styles/Output.styled";
 import { termContext } from "./Terminal";
+import { t } from "../i18n";
 
 type Props = {
   cmd: "projects" | "socials";
@@ -24,8 +25,13 @@ const Usage: React.FC<Props> = ({ cmd, marginY = false }) => {
 
   return (
     <UsageDiv data-testid={`${cmd}-invalid-arg`} marginY={marginY}>
-      Usage: {cmd} {action} &#60;{arg[cmd].placeholder}&#62; <br />
-      eg:{" "}
+      {t("cmd.usage.usage", {
+        cmd,
+        action,
+        placeholder: arg[cmd].placeholder,
+      })}{" "}
+      <br />
+      {t("cmd.usage.eg")}{" "}
       <span
         onClick={handleExampleClick}
         style={{

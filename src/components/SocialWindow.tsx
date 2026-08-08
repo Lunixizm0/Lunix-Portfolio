@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import SocialContent from "./social/SocialContent";
+import { t } from "../i18n";
 
 // Social window: renders the müsaitlik (availability) UI natively (React port
 // of the old /social/ static app). Config is fetched from /musaitlik.json.
@@ -402,13 +403,13 @@ const SocialWindow: React.FC<Props> = ({
           onFocus && onFocus();
         }}
       >
-        <WindowTitle>Social</WindowTitle>
-        <WindowControls aria-label="Window controls">
+        <WindowTitle>{t("socialWindow.title")}</WindowTitle>
+        <WindowControls aria-label={t("common.windowControls")}>
           {onMinimize && (
             <ControlButton
               variant="min"
-              title="Minimize"
-              aria-label="Minimize"
+              title={t("common.minimize")}
+              aria-label={t("common.minimize")}
               onClick={onMinimize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -419,8 +420,8 @@ const SocialWindow: React.FC<Props> = ({
           {onToggleMaximize && (
             <ControlButton
               variant="max"
-              title="Maximize"
-              aria-label="Maximize"
+              title={t("common.maximize")}
+              aria-label={t("common.maximize")}
               onClick={onToggleMaximize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -438,8 +439,8 @@ const SocialWindow: React.FC<Props> = ({
           )}
           <ControlButton
             variant="close"
-            title="Close"
-            aria-label="Close"
+            title={t("common.close")}
+            aria-label={t("common.close")}
             onClick={onClose}
           >
             <svg viewBox="0 0 10 10" aria-hidden="true">

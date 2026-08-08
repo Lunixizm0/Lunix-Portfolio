@@ -10,6 +10,7 @@ import {
   VolumePercent,
   VideoModeBtn,
 } from "../styles/Social.styled";
+import { t } from "../../i18n";
 
 type Props = {
   videoOnly: boolean;
@@ -130,21 +131,23 @@ const BackgroundVideo: React.FC<Props> = ({ videoOnly, onToggleVideoMode }) => {
           <VideoModeBtn
             className={videoOnly ? "active" : ""}
             type="button"
-            aria-label="Videoyu göster veya gizle"
+            aria-label={t("social.video.gosterGizle")}
             onClick={onToggleVideoMode}
           >
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z" />
             </svg>
-            {videoOnly ? "Videoyu gizle" : "Videoyu göster"}
+            {videoOnly
+              ? t("social.video.videoyuGizle")
+              : t("social.video.videoyuGoster")}
           </VideoModeBtn>
 
           <SoundControls className="sound-controls">
             <SoundBtn
               className={muted ? "muted" : "on"}
               type="button"
-              title="Sesi Aç/Kapat"
-              aria-label="Sesi aç veya kapat"
+              title={t("social.video.sesButonu")}
+              aria-label={t("social.video.sesAcKapat")}
               onClick={toggleSes}
             >
               <svg
@@ -169,7 +172,7 @@ const BackgroundVideo: React.FC<Props> = ({ videoOnly, onToggleVideoMode }) => {
               min="0"
               max="100"
               value={volume}
-              aria-label="Ses seviyesi"
+              aria-label={t("social.video.sesSeviyesi")}
               onChange={e => changeVolume(Number(e.target.value))}
             />
             <VolumePercent>{volume}%</VolumePercent>

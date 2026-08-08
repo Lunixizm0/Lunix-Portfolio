@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { t } from "../i18n";
 
 // Resume window with integrated PDF viewer
 
@@ -440,13 +441,13 @@ const ResumeWindow: React.FC<Props> = ({
           onFocus && onFocus();
         }}
       >
-        <WindowTitle>Resume</WindowTitle>
-        <WindowControls aria-label="Window controls">
+        <WindowTitle>{t("resumeWindow.title")}</WindowTitle>
+        <WindowControls aria-label={t("common.windowControls")}>
           {onMinimize && (
             <ControlButton
               variant="min"
-              title="Minimize"
-              aria-label="Minimize"
+              title={t("common.minimize")}
+              aria-label={t("common.minimize")}
               onClick={onMinimize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -457,8 +458,8 @@ const ResumeWindow: React.FC<Props> = ({
           {onToggleMaximize && (
             <ControlButton
               variant="max"
-              title="Maximize"
-              aria-label="Maximize"
+              title={t("common.maximize")}
+              aria-label={t("common.maximize")}
               onClick={onToggleMaximize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -476,8 +477,8 @@ const ResumeWindow: React.FC<Props> = ({
           )}
           <ControlButton
             variant="close"
-            title="Close"
-            aria-label="Close"
+            title={t("common.close")}
+            aria-label={t("common.close")}
             onClick={onClose}
           >
             <svg viewBox="0 0 10 10" aria-hidden="true">

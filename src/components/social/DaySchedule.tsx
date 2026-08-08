@@ -27,6 +27,7 @@ import {
   GunNotu,
   CizelgeBos,
 } from "../styles/Social.styled";
+import { t } from "../../i18n";
 
 type Props = { cfg: MusaitlikConfig; seciliISO: string };
 
@@ -62,7 +63,7 @@ const DaySchedule: React.FC<Props> = ({ cfg, seciliISO }) => {
   return (
     <>
       <CizelgeBaslik>
-        <KartEtiket>Gün çizelgesi</KartEtiket>
+        <KartEtiket>{t("social.daySchedule.gunCizelgesi")}</KartEtiket>
         <SeciliDurum>{seciliDurumMetni(cfg, seciliISO, bugun, d)}</SeciliDurum>
       </CizelgeBaslik>
       <SeciliTarih>{tarihMetni(cfg, seciliISO, true)}</SeciliTarih>
@@ -79,7 +80,9 @@ const DaySchedule: React.FC<Props> = ({ cfg, seciliISO }) => {
                   <BlokSaat>
                     {yerelSaatStr(ar.bas)}–{yerelSaatStr(ar.bit)}
                   </BlokSaat>
-                  <BlokEtiket>{ar.etiket || "Okul"}</BlokEtiket>
+                  <BlokEtiket>
+                    {ar.etiket || t("social.engine.okul")}
+                  </BlokEtiket>
                 </BlokUst>
                 {ar.not ? <BlokNot>{ar.not}</BlokNot> : null}
               </BlokGovde>
@@ -97,9 +100,7 @@ const DaySchedule: React.FC<Props> = ({ cfg, seciliISO }) => {
       )}
 
       {d.araliklar.length === 0 && (
-        <CizelgeBos>
-          Bu gün hiç meşgul bloğum yok — tüm gün müsaitim.
-        </CizelgeBos>
+        <CizelgeBos>{t("social.daySchedule.bosGun")}</CizelgeBos>
       )}
     </>
   );

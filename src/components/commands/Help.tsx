@@ -8,6 +8,7 @@ import {
 import { commands, termContext } from "../Terminal";
 import { generateTabs } from "../../utils/funcs";
 import { useContext } from "react";
+import { t } from "../../i18n";
 
 const Help: React.FC = () => {
   const { executeCommand } = useContext(termContext);
@@ -33,10 +34,14 @@ const Help: React.FC = () => {
         </CmdList>
       ))}
       <KeyContainer>
-        <div>Tab or Ctrl + i&nbsp; =&gt; autocompletes the command</div>
-        <div>Up Arrow {generateTabs(5)} =&gt; go back to previous command</div>
-        <div>Ctrl + l {generateTabs(5)} =&gt; clear the terminal</div>
-        <div>Click on any command above to execute it</div>
+        <div>{t("cmd.help.tabAutocomplete")}</div>
+        <div>
+          {t("cmd.help.upArrow")} {generateTabs(5)} {t("cmd.help.upArrowDesc")}
+        </div>
+        <div>
+          {t("cmd.help.ctrlL")} {generateTabs(5)} {t("cmd.help.ctrlLDesc")}
+        </div>
+        <div>{t("cmd.help.clickAny")}</div>
       </KeyContainer>
     </HelpWrapper>
   );

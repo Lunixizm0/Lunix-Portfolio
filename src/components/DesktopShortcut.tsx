@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { t } from "../i18n";
 
 type Props = {
   onOpen?: () => void;
@@ -200,7 +201,7 @@ const DesktopShortcut: React.FC<Props> = ({
     <ShortcutWrap
       role="button"
       tabIndex={0}
-      aria-label={`Open ${label}`}
+      aria-label={t("desktop.openLabel", { label })}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       style={style}

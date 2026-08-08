@@ -11,6 +11,7 @@ import {
   SocialGrid,
   SocialLink,
 } from "../styles/Social.styled";
+import { t } from "../../i18n";
 
 type Props = { cfg: MusaitlikConfig | null };
 
@@ -45,8 +46,8 @@ const ProfileCard: React.FC<Props> = ({ cfg }) => (
         <SocialLink
           className="email"
           href="mailto:social@lunixizm.website"
-          title="E-posta"
-          aria-label="E-posta"
+          title={t("social.profile.eposta")}
+          aria-label={t("social.profile.eposta")}
         >
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />

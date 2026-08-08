@@ -9,6 +9,7 @@ import {
 } from "../../utils/funcs";
 import { termContext } from "../Terminal";
 import Usage from "../Usage";
+import { t } from "../../i18n";
 
 const Socials: React.FC = () => {
   const { arg, history, index, rerender } = useContext(termContext);
@@ -61,7 +62,7 @@ const Socials: React.FC = () => {
     checkArg()
   ) : (
     <HelpWrapper data-testid="socials">
-      <ProjectsIntro>Here are my social links</ProjectsIntro>
+      <ProjectsIntro>{t("cmd.socials.intro")}</ProjectsIntro>
       {socials.map(({ id, title, url, tab }) => (
         <CmdList key={title}>
           <Cmd

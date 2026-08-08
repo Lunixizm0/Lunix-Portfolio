@@ -25,7 +25,7 @@ const CUSTOM_PROPS = new Set([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <StyleSheetManager shouldForwardProp={(prop) => !CUSTOM_PROPS.has(prop)}>
+    <StyleSheetManager shouldForwardProp={prop => !CUSTOM_PROPS.has(prop)}>
       <App />
     </StyleSheetManager>
   </React.StrictMode>

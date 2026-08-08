@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { t } from "../i18n";
 
 type Props = {
   isFullscreen: boolean;
@@ -94,10 +95,10 @@ const FullscreenToggle: React.FC<Props> = ({
     <Wrap
       hidden={hidden}
       onClick={onToggle}
-      aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+      aria-label={isFullscreen ? t("fullscreen.exit") : t("fullscreen.enter")}
     >
       <Icon exit={isFullscreen} />
-      <span>{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>
+      <span>{t("fullscreen.label")}</span>
     </Wrap>
   );
 };

@@ -3,6 +3,8 @@
    diliminde (Europe/Istanbul, sabit ofset) tanımlanır, ziyaretçiye kendi
    saat diliminde gösterilir. DOM/SEO katmanı yok — saf TS. */
 
+import { LANG, t } from "../i18n";
+
 export type MusaitlikConfig = {
   surum?: number;
   kisi?: {
@@ -131,6 +133,60 @@ export type KartVerisi = {
 
 const CACHE_KEY = "bk-musaitlik-config-v1";
 
+/* Görüntüleme dili: musaitlik.json Türkçe sabit kalır; EN modda yalnız
+   gösterilen mesajlar/ay-gün adları İngilizce'ye çevrilir. Serbest metinler
+   (istisna notları, tatil adları) config'de yazıldığı gibi kalır. */
+const EN_MESAJLAR = {
+  musait: "AVAILABLE NOW",
+  mesgul: "NOT AVAILABLE NOW",
+  mesgulAlt: "{bit} — school ends, available after",
+  mesaiBitti: "School's done — available",
+  uyku: "Night sleep — available again after 06:00",
+  haftaSonu: "Weekend — available",
+  musaitOncesi: "Available until {bas} — then school",
+  musaitTumGun: "No school today, available all day",
+  musaitTatil: "{tatilAd} — available all day",
+  calisiyor: "School",
+  calismiyor: "No school",
+  gunler: [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ],
+  gunlerKisa: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  aylar: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+};
+
+export function yerelMesajlar(
+  cfg: MusaitlikConfig
+): NonNullable<MusaitlikConfig["mesajlar"]> {
+  if (LANG !== "en") return cfg.mesajlar || {};
+  return { ...(cfg.mesajlar || {}), ...EN_MESAJLAR };
+}
+
+/* Display config: mesajlar'ı görüntüleme diline göre değiştirilmiş haliyle
+   döndürür. Sosyal bileşenler bunu kullanır; veri dosyası hiç değişmez. */
+export function gorunumCfg(cfg: MusaitlikConfig): MusaitlikConfig {
+  return { ...cfg, mesajlar: yerelMesajlar(cfg) };
+}
+
 export async function configYukle(
   yol = "/musaitlik.json"
 ): Promise<MusaitlikConfig> {
@@ -238,7 +294,7 @@ export function gunBilgiTemel(
 ): Omit<GunBilgi, "araliklar" | "basYerel" | "bitYerel" | "aralikMetni"> {
   const istler = gunIstisnalari(cfg, iso);
   const ad = (x: { kategori?: string; not?: string }) =>
-    x.kategori || x.not || "Özel gün";
+    x.kategori || x.not || t("social.engine.ozelGun");
   const varsayilanSaat = gunSaati(cfg, iso);
   const tat = (cfg.tatiller || []).find(
     t => iso >= t.baslangic && iso <= t.bitis
@@ -286,7 +342,7 @@ export function gunBilgiTemel(
       {
         bas: varsayilanSaat.bas,
         bit: varsayilanSaat.bit,
-        etiket: "Okul",
+        etiket: t("social.engine.okul"),
         tur: "calisma",
       },
     ];
@@ -312,13 +368,13 @@ export function gunBilgiTemel(
     etiket = ad(oncelik || istler[0]);
   } else if (tat) {
     tip = "tatil";
-    etiket = tat.ad || "Tatil";
+    etiket = tat.ad || t("social.engine.tatil");
   } else if (!varsayilanSaat) {
     tip = "haftasonu";
-    etiket = "Bugün okul yok";
+    etiket = t("social.engine.bugunOkulYok");
   } else {
     tip = "acik";
-    etiket = "Okul";
+    etiket = t("social.engine.okul");
   }
 
   return {
@@ -353,7 +409,7 @@ export function gunBilgi(cfg: MusaitlikConfig, iso: string): GunBilgi {
       araliklar.push({
         bas: an(cfg, iso, b.bas),
         bit: an(cfg, iso, b.bit),
-        etiket: b.etiket || "Okul",
+        etiket: b.etiket || t("social.engine.okul"),
         not: b.not || "",
         tur: b.tur || "calisma",
       });
@@ -387,7 +443,7 @@ export function uykuAralik(cfg: MusaitlikConfig, iso: string): Aralik | null {
     bas,
     bit,
     uyku: true,
-    etiket: u.etiket || "Uyku",
+    etiket: u.etiket || t("social.engine.uyku"),
     not: "",
     tur: "uyku",
   };
@@ -497,7 +553,7 @@ export function haftalikOzet(cfg: MusaitlikConfig): string {
   const h = cfg.haftalikSaatler || {};
   const idx = (g: number) => (g === 0 ? 6 : g - 1);
   const acik = gunSirasi().filter(g => h[String(g)] && h[String(g)].acik);
-  if (!acik.length) return "Hiçbir gün okul yok";
+  if (!acik.length) return t("social.engine.haftalikOzetBos");
   const gruplar: Array<{ bas: string; bit: string; gunler: number[] }> = [];
   for (const g of acik) {
     const s = h[String(g)];
@@ -556,9 +612,16 @@ export function geriSayim(ms: number): string {
   const dk = Math.floor(ms / 60000);
   const s = Math.floor(dk / 60);
   const g = Math.floor(s / 24);
-  if (g >= 1) return `${g} gün ${s % 24} saat`;
-  if (s >= 1) return `${s} saat ${dk % 60} dakika`;
-  return `${dk} dakika`;
+  const kalanS = s % 24;
+  const kalanDk = dk % 60;
+  const gunB = g === 1 ? t("social.engine.gun1") : t("social.engine.gunN");
+  const saatB = (n: number) =>
+    n === 1 ? t("social.engine.saat1") : t("social.engine.saatN");
+  const dkB = (n: number) =>
+    n === 1 ? t("social.engine.dakika1") : t("social.engine.dakikaN");
+  if (g >= 1) return `${g} ${gunB} ${kalanS} ${saatB(kalanS)}`;
+  if (s >= 1) return `${s} ${saatB(s)} ${kalanDk} ${dkB(kalanDk)}`;
+  return `${dk} ${dkB(dk)}`;
 }
 
 /* Durum cümlesi — kart ve meta aynı metni kullansın diye tek yerde. */
@@ -598,10 +661,10 @@ export function kartVerisi(cfg: MusaitlikConfig, d: Durum): KartVerisi {
   if (g)
     geriSayimCumle =
       tur === "mesgul"
-        ? `Kalan iş: ${g}`
+        ? t("social.engine.kalanIs", { g })
         : tur === "uyku"
-          ? `Uyku: ${g}`
-          : `Müsaitim: ${g}`;
+          ? t("social.engine.uykuSayim", { g })
+          : t("social.engine.musaitimSayim", { g });
 
   const tz = ziyaretciSaatDilimi();
   const kayar = saatKaymasiVar(cfg, bugunISO(cfg, d.now));
@@ -611,14 +674,16 @@ export function kartVerisi(cfg: MusaitlikConfig, d: Durum): KartVerisi {
     unvan: cfg.kisi?.unvan || "",
     bugunTarih: tarihMetni(cfg, d.bugunISO),
     durumMetni: d.musait
-      ? m?.musait || "ŞU AN MÜSAİTİM"
-      : m?.mesgul || "ŞU AN MÜSAİT DEĞİLİM",
+      ? m?.musait || t("social.engine.suanMusaitim")
+      : m?.mesgul || t("social.engine.suanMusaitDegilim"),
     geriSayimCumle,
     altMetin: altMetinUret(cfg, d),
     tzNot: kayar
-      ? `Saatler senin saat dilimine göre${tz ? ` (${tz})` : ""}`
-      : "Saatler Türkiye saatiyle",
-    goruntulenme: `${cfg.goruntulenme || 0} görüntülenme`,
+      ? t("social.engine.saatlerSeninDilimine") + (tz ? ` (${tz})` : "")
+      : t("social.engine.saatlerTurkiye"),
+    goruntulenme: t("social.engine.goruntulenme", {
+      n: cfg.goruntulenme || 0,
+    }),
     durumRenk: d.musait
       ? "#1ed760"
       : d.uykuda
@@ -655,7 +720,8 @@ export function icsUret(
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "PRODID:-//" + kacir(cfg.kisi?.ad || "") + "//Musaitlik//TR",
-    "X-WR-CALNAME:" + kacir((cfg.kisi?.ad || "") + " — Okul saatleri"),
+    "X-WR-CALNAME:" +
+      kacir((cfg.kisi?.ad || "") + " — " + t("social.engine.okulSaatleri")),
     "X-WR-TIMEZONE:" + (cfg.saat?.kaynakSaatDilimi || "Europe/Istanbul"),
   ];
   for (let iso = bas; iso <= son; iso = gunEkle(iso, 1)) {
@@ -676,10 +742,15 @@ export function icsUret(
         "SUMMARY:" +
           kacir(
             cfg.kisi?.ad ||
-              "" + (cfg.ters ? " okulda — müsait değil" : " müsait")
+              "" +
+                (cfg.ters
+                  ? t("social.engine.okuldaMusaitDegil")
+                  : t("social.engine.musait"))
           ),
         "DESCRIPTION:" +
-          kacir(`${ar.etiket || "Okul"}${g.not ? " · " + g.not : ""}`),
+          kacir(
+            `${ar.etiket || t("social.engine.okul")}${g.not ? " · " + g.not : ""}`
+          ),
         "TRANSP:OPAQUE",
         "STATUS:CONFIRMED",
         "URL:" + (cfg.kisi?.sosyalUrl || ""),

@@ -5,6 +5,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index, follow" />
+
+  <!-- Runtime language detection. Runs synchronously before the app module
+       loads so the first paint is already in the visitor's language
+       (defaults to English). SEO meta/structured data below stays English. -->
+  <script>
+    (function () {
+      var l = (navigator.language || "en").toLowerCase().startsWith("tr")
+        ? "tr"
+        : "en";
+      window.__APP_LANG__ = l;
+      document.documentElement.lang = l;
+    })();
+  </script>
   <meta name="author" content="Utku Ceylan" />
   <meta name="theme-color" content="#000000" />
 
