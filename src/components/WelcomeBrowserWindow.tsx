@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { t } from "../i18n";
 
 // Simple browser-like window that is draggable/resizable and shows a welcome message
 
@@ -418,13 +419,13 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
           onFocus && onFocus();
         }}
       >
-        <WindowTitle>Browser</WindowTitle>
-        <WindowControls aria-label="Window controls">
+        <WindowTitle>{t("browser.title")}</WindowTitle>
+        <WindowControls aria-label={t("common.windowControls")}>
           {onMinimize && (
             <ControlButton
               variant="min"
-              title="Minimize"
-              aria-label="Minimize"
+              title={t("common.minimize")}
+              aria-label={t("common.minimize")}
               onClick={onMinimize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -435,8 +436,8 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
           {onToggleMaximize && (
             <ControlButton
               variant="max"
-              title="Maximize"
-              aria-label="Maximize"
+              title={t("common.maximize")}
+              aria-label={t("common.maximize")}
               onClick={onToggleMaximize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -454,8 +455,8 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
           )}
           <ControlButton
             variant="close"
-            title="Close"
-            aria-label="Close"
+            title={t("common.close")}
+            aria-label={t("common.close")}
             onClick={onClose}
           >
             <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -484,7 +485,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
       )}
 
       <Toolbar>
-        <LocationBar>Utku Ceylan (Lunixizm) - Security Researcher</LocationBar>
+        <LocationBar>{t("browser.toolbar")}</LocationBar>
       </Toolbar>
 
       <Content maximized={isMaximized}>
@@ -544,11 +545,11 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                   opacity: 0.95,
                 }}
               >
-                Security Researcher
+                {t("browser.role")}
               </p>
               <div
                 role="group"
-                aria-label="Quick links"
+                aria-label={t("browser.quickLinks")}
                 style={{
                   display: "flex",
                   flexWrap: "wrap",
@@ -605,7 +606,7 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                     cursor: "pointer",
                   }}
                 >
-                  Resume
+                  {t("browser.resume")}
                 </a>
               </div>
             </div>
@@ -645,13 +646,11 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                 <h3
                   style={{ margin: 0, color: "#88C0D0", fontSize: "1.05rem" }}
                 >
-                  Security Research
+                  {t("browser.cards.securityTitle")}
                 </h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6, color: "#D8DEE9" }}>
-                Independent security researcher. Focused on vulnerability
-                discovery and responsible disclosure in open-source Linux
-                ecosystems.
+                {t("browser.cards.securityBody")}
               </p>
             </div>
 
@@ -685,13 +684,13 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                 <h3
                   style={{ margin: 0, color: "#A3BE8C", fontSize: "1.05rem" }}
                 >
-                  Team Experience
+                  {t("browser.cards.teamTitle")}
                 </h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6, color: "#D8DEE9" }}>
-                Cyber Security &amp; Software Team Captain at{" "}
-                <strong style={{ color: "#EBCB8B" }}>ThinkTank</strong>, leading
-                security projects and technical direction.
+                {t("browser.cards.teamBody", {
+                  team: t("browser.cards.thinkTank"),
+                })}
               </p>
             </div>
 
@@ -719,14 +718,13 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                 <h3
                   style={{ margin: 0, color: "#EBCB8B", fontSize: "1.05rem" }}
                 >
-                  Education
+                  {t("browser.cards.educationTitle")}
                 </h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6, color: "#D8DEE9" }}>
-                Computer Technologies at{" "}
-                <strong style={{ color: "#D08770" }}>BIST MTAL</strong>:
-                technical planning, architecture, and coordination of projects
-                for internal school systems.
+                {t("browser.cards.educationBody", {
+                  school: t("browser.cards.bistMtal"),
+                })}
               </p>
             </div>
 
@@ -754,13 +752,13 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
                 <h3
                   style={{ margin: 0, color: "#D08770", fontSize: "1.05rem" }}
                 >
-                  Robotics
+                  {t("browser.cards.roboticsTitle")}
                 </h3>
               </div>
               <p style={{ margin: 0, lineHeight: 1.6, color: "#D8DEE9" }}>
-                Was part of the{" "}
-                <strong style={{ color: "#B48EAD" }}>Pars Robotics</strong>{" "}
-                team, contributing on a short-term basis.
+                {t("browser.cards.roboticsBody", {
+                  team: t("browser.cards.parsRobotics"),
+                })}
               </p>
             </div>
           </div>

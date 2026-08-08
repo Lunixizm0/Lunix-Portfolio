@@ -11,6 +11,7 @@ import Projects from "./commands/Projects";
 import Socials from "./commands/Socials";
 import { OutputContainer, UsageDiv } from "./styles/Output.styled";
 import { termContext } from "./Terminal";
+import { t } from "../i18n";
 import { useContext } from "react";
 
 type Props = {
@@ -26,15 +27,17 @@ const Output: React.FC<Props> = ({ index, cmd }) => {
   // return 'Usage: <cmd>' if command arg is not valid
   // eg: about tt
   if (!specialCmds.includes(cmd) && arg.length > 0)
-    return <UsageDiv data-testid="usage-output">Usage: {cmd}</UsageDiv>;
+    return (
+      <UsageDiv data-testid="usage-output">
+        {t("terminal.usage", { cmd })}
+      </UsageDiv>
+    );
 
   // hidden easter eggs
   if (cmd === "sudo") {
     return (
       <OutputContainer>
-        <GeneralOutput>
-          Nah, least privilage concept. There is no need for that.
-        </GeneralOutput>
+        <GeneralOutput>{t("terminal.sudo")}</GeneralOutput>
       </OutputContainer>
     );
   }
@@ -55,7 +58,7 @@ const Output: React.FC<Props> = ({ index, cmd }) => {
   if (cmd === "ls") {
     return (
       <OutputContainer>
-        <GeneralOutput>There's nothing here except you.</GeneralOutput>
+        <GeneralOutput>{t("terminal.ls")}</GeneralOutput>
       </OutputContainer>
     );
   }

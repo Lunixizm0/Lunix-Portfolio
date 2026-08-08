@@ -12,6 +12,7 @@ import {
 } from "../styles/Projects.styled";
 import { termContext } from "../Terminal";
 import Usage from "../Usage";
+import { t } from "../../i18n";
 
 const Projects: React.FC = () => {
   const { arg, history, index, rerender } = useContext(termContext);
@@ -53,10 +54,7 @@ const Projects: React.FC = () => {
     checkArg()
   ) : (
     <div data-testid="projects">
-      <ProjectsIntro>
-        “Talk is cheap. Show me the code”? I got you! <br />
-        Here are some of my projects.
-      </ProjectsIntro>
+      <ProjectsIntro>{t("cmd.projects.intro")}</ProjectsIntro>
       {projects.map(({ id, title, desc, url }) => (
         <ProjectContainer key={id}>
           <ProjectTitle

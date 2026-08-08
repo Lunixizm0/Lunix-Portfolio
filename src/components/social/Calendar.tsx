@@ -18,6 +18,7 @@ import {
   Hucre,
   Lejant,
 } from "../styles/Social.styled";
+import { t } from "../../i18n";
 
 type Props = {
   cfg: MusaitlikConfig;
@@ -59,13 +60,21 @@ const Calendar: React.FC<Props> = ({
         <AyAdi>
           {cfg.mesajlar?.aylar?.[ay] || String(ay + 1)} {yil}
         </AyAdi>
-        <AyDugme type="button" aria-label="Önceki ay" onClick={onOnceki}>
+        <AyDugme
+          type="button"
+          aria-label={t("social.calendar.oncekiAy")}
+          onClick={onOnceki}
+        >
           ‹
         </AyDugme>
         <AyDugmeBugun type="button" onClick={onBugun}>
-          Bugün
+          {t("social.calendar.bugun")}
         </AyDugmeBugun>
-        <AyDugme type="button" aria-label="Sonraki ay" onClick={onSonraki}>
+        <AyDugme
+          type="button"
+          aria-label={t("social.calendar.sonrakiAy")}
+          onClick={onSonraki}
+        >
           ›
         </AyDugme>
       </AySatir>
@@ -95,15 +104,15 @@ const Calendar: React.FC<Props> = ({
       <Lejant>
         <span>
           <i style={{ background: "rgba(255,59,48,.24)" }} />
-          Okul
+          {t("social.calendar.okul")}
         </span>
         <span>
           <i style={{ background: "rgba(255,255,255,.07)" }} />
-          Müsaitim
+          {t("social.calendar.musaitim")}
         </span>
         <span>
           <i style={{ border: "1px solid rgba(255,255,255,.18)" }} />
-          Tatil
+          {t("social.calendar.tatil")}
         </span>
       </Lejant>
     </>
@@ -152,10 +161,10 @@ export function seciliDurumMetni(
   const kisa = cfg.mesajlar?.gunlerKisa || [];
   const wd = haftaninGunu(iso);
   let rel: string;
-  if (iso === bugun) rel = "Bugün";
-  else if (iso === gunEkle(bugun, 1)) rel = "Yarın";
+  if (iso === bugun) rel = t("social.calendar.bugun");
+  else if (iso === gunEkle(bugun, 1)) rel = t("social.calendar.yarin");
   else rel = kisa[wd === 0 ? 6 : wd - 1];
-  return `${rel} · ${d.acik ? "okul" : "müsaitim"}`;
+  return `${rel} · ${d.acik ? t("social.calendar.okul") : t("social.calendar.musaitim")}`;
 }
 
 export default Calendar;

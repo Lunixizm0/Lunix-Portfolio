@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import DesktopShortcut, { Icons } from "./DesktopShortcut";
+import { t } from "../i18n";
 
 type Props = {
   onOpenTerminal: () => void;
@@ -55,35 +56,35 @@ const DesktopShortcuts: React.FC<Props> = ({
   return (
     <Grid hidden={hidden} mobileExpanded={mobileExpanded}>
       <DesktopShortcut
-        label="Browser"
+        label={t("desktop.browser")}
         onOpen={onOpenWelcome}
         icon={Icons.Browser}
         active={activeBrowser}
       />
       <DesktopShortcut
-        label="Terminal"
+        label={t("desktop.terminal")}
         onOpen={onOpenTerminal}
         icon={Icons.Terminal}
         active={activeTerminal}
       />
       <DesktopShortcut
-        label="Social"
+        label={t("desktop.social")}
         onOpen={onOpenSocial}
         icon={Icons.Social}
         active={activeSocial}
       />
       <DesktopShortcut
-        label="LinkedIn"
+        label={t("desktop.linkedin")}
         href="https://www.linkedin.com/in/utku-ceylan-/"
         icon={Icons.LinkedIn}
       />
       <DesktopShortcut
-        label="GitHub"
+        label={t("desktop.github")}
         href="https://github.com/Lunixizm0"
         icon={Icons.GitHub}
       />
       <DesktopShortcut
-        label="Resume"
+        label={t("desktop.resume")}
         onOpen={onOpenResume}
         icon={Icons.PDF}
         active={activeResume}

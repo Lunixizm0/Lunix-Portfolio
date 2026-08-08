@@ -25,6 +25,7 @@ import {
   GithubHata,
   GwLink,
 } from "../styles/Social.styled";
+import { LANG, t } from "../../i18n";
 
 const KULLANICI = "Lunixizm0";
 const GORUNEN_AD = "Utku Ceylan";
@@ -72,21 +73,27 @@ type Veri = {
 };
 
 const sayiKisa = (n: number) =>
-  new Intl.NumberFormat("tr-TR", {
+  new Intl.NumberFormat(LANG === "en" ? "en-US" : "tr-TR", {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(n);
 
 function zamanFarki(iso: string): string {
   const sn = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (sn < 60) return "az önce";
+  if (sn < 60) return t("social.github.azOnce");
   const dk = Math.floor(sn / 60);
-  if (dk < 60) return `${dk} dk önce`;
+  if (dk < 60) return t("social.github.dkOnceN", { n: dk });
   const s = Math.floor(dk / 60);
-  if (s < 24) return `${s} saat önce`;
+  if (s < 24)
+    return t(s === 1 ? "social.github.saatOnce1" : "social.github.saatOnceN", {
+      n: s,
+    });
   const g = Math.floor(s / 24);
-  if (g < 30) return `${g} gün önce`;
-  return new Date(iso).toLocaleDateString("tr-TR");
+  if (g < 30)
+    return t(g === 1 ? "social.github.gunOnce1" : "social.github.gunOnceN", {
+      n: g,
+    });
+  return new Date(iso).toLocaleDateString(LANG === "en" ? "en-US" : "tr-TR");
 }
 
 async function api<T>(url: string): Promise<T> {
@@ -134,25 +141,25 @@ function aktiflik(events: GhEvent[]) {
     const aksiyon = (e.payload && e.payload.action) || "";
     switch (e.type) {
       case "PushEvent":
-        return `${repo} üzerinde push yaptı`;
+        return t("social.github.push", { repo });
       case "CreateEvent":
-        return `${repo} oluşturdu`;
+        return t("social.github.olusturdu", { repo });
       case "DeleteEvent":
-        return `${repo} silindi`;
+        return t("social.github.silindi", { repo });
       case "PullRequestEvent":
-        return `${repo} için PR ${aksiyon}`;
+        return t("social.github.pr", { repo, aksiyon });
       case "IssuesEvent":
-        return `${repo} için issue ${aksiyon}`;
+        return t("social.github.issue", { repo, aksiyon });
       case "StarEvent":
-        return `${repo} repo'sunu yıldızladı`;
+        return t("social.github.yildizladi", { repo });
       case "ForkEvent":
-        return `${repo} repo'sunu fork'ladı`;
+        return t("social.github.forkLadi", { repo });
       case "WatchEvent":
-        return `${repo} repo'sunu izlemeye aldı`;
+        return t("social.github.izlemeyeAldi", { repo });
       case "PublicEvent":
-        return `${repo} repo'sunu herkese açtı`;
+        return t("social.github.herkeseActi", { repo });
       case "ReleaseEvent":
-        return `${repo} için sürüm yayınladı`;
+        return t("social.github.surumYayinladi", { repo });
       default:
         return (e.type || "").replace("Event", "") + (repo ? " · " + repo : "");
     }
@@ -167,10 +174,10 @@ function kutular(repos: GhRepo[], user: GhUser) {
   const yildiz = repos.reduce((a, r) => a + (r.stargazers_count || 0), 0);
   const fork = repos.reduce((a, r) => a + (r.forks_count || 0), 0);
   return [
-    { sayi: repos.length, etiket: "Repo" },
-    { sayi: yildiz, etiket: "Yıldız" },
-    { sayi: fork, etiket: "Fork" },
-    { sayi: user.followers || 0, etiket: "Takipçi" },
+    { sayi: repos.length, etiket: t("social.github.repo") },
+    { sayi: yildiz, etiket: t("social.github.yildiz") },
+    { sayi: fork, etiket: t("social.github.fork") },
+    { sayi: user.followers || 0, etiket: t("social.github.takipci") },
   ];
 }
 
@@ -205,14 +212,14 @@ const GitHubWidget: React.FC = () => {
   }, []);
 
   if (durum === "yukleniyor")
-    return <GwYukleniyor>GitHub istatistikleri yükleniyor…</GwYukleniyor>;
+    return <GwYukleniyor>{t("social.github.yukleniyor")}</GwYukleniyor>;
 
   if (durum === "hata" || !veri) {
     return (
       <GithubHata>
-        <p>GitHub istatistikleri şu an yüklenemedi.</p>
+        <p>{t("social.github.yuklenemedi")}</p>
         <GwLink href={SITE} target="_blank" rel="noopener noreferrer">
-          GitHub profilini aç →
+          {t("social.github.profiliniAc")}
         </GwLink>
       </GithubHata>
     );
@@ -228,7 +235,7 @@ const GitHubWidget: React.FC = () => {
       <GwUstBaslik>
         <GwLogo>GitHub</GwLogo>
         <GwGor href={SITE} target="_blank" rel="noopener noreferrer">
-          Profili gör ↗
+          {t("social.github.profiliGor")}
         </GwGor>
       </GwUstBaslik>
 
@@ -282,7 +289,7 @@ const GitHubWidget: React.FC = () => {
 
       {aktif.length > 0 && (
         <>
-          <GwAltBaslik>Son aktivite</GwAltBaslik>
+          <GwAltBaslik>{t("social.github.sonAktivite")}</GwAltBaslik>
           <GwAktif>
             {aktif.map((a, i) => (
               <GwAktifSatir key={i}>

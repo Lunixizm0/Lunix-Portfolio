@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import Terminal from "./Terminal";
+import { t } from "../i18n";
 
 type Props = {
   onClose: () => void;
@@ -422,13 +423,13 @@ const TerminalWindow: React.FC<Props> = ({
           onFocus && onFocus();
         }}
       >
-        <WindowTitle>Terminal</WindowTitle>
-        <WindowControls aria-label="Window controls">
+        <WindowTitle>{t("terminalWindow.title")}</WindowTitle>
+        <WindowControls aria-label={t("common.windowControls")}>
           {onMinimize && (
             <ControlButton
               variant="min"
-              title="Minimize"
-              aria-label="Minimize"
+              title={t("common.minimize")}
+              aria-label={t("common.minimize")}
               onClick={onMinimize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -439,8 +440,8 @@ const TerminalWindow: React.FC<Props> = ({
           {onToggleMaximize && (
             <ControlButton
               variant="max"
-              title="Maximize"
-              aria-label="Maximize"
+              title={t("common.maximize")}
+              aria-label={t("common.maximize")}
               onClick={onToggleMaximize}
             >
               <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -458,8 +459,8 @@ const TerminalWindow: React.FC<Props> = ({
           )}
           <ControlButton
             variant="close"
-            title="Close"
-            aria-label="Close"
+            title={t("common.close")}
+            aria-label={t("common.close")}
             onClick={onClose}
           >
             <svg viewBox="0 0 10 10" aria-hidden="true">
@@ -488,18 +489,18 @@ const TerminalWindow: React.FC<Props> = ({
       )}
 
       <MenuBar maximized={isMaximized}>
-        <MenuItem>File</MenuItem>
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>View</MenuItem>
-        <MenuItem>Search</MenuItem>
-        <MenuItem>Terminal</MenuItem>
-        <MenuItem>Help</MenuItem>
+        <MenuItem>{t("terminalWindow.file")}</MenuItem>
+        <MenuItem>{t("terminalWindow.edit")}</MenuItem>
+        <MenuItem>{t("terminalWindow.view")}</MenuItem>
+        <MenuItem>{t("terminalWindow.search")}</MenuItem>
+        <MenuItem>{t("terminalWindow.terminal")}</MenuItem>
+        <MenuItem>{t("terminalWindow.help")}</MenuItem>
       </MenuBar>
 
       <TerminalContent maximized={isMaximized}>
         {isMobileViewport ? (
           <MobileNotice>
-            <p>Terminal masaüstü için yapılmıştır.</p>
+            <p>{t("terminalWindow.mobileNotice")}</p>
           </MobileNotice>
         ) : (
           <Terminal />

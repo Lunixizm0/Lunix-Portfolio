@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { MusaitlikConfig, configYukle } from "../../utils/musaitlik";
+import {
+  MusaitlikConfig,
+  configYukle,
+  gorunumCfg,
+} from "../../utils/musaitlik";
 import BackgroundVideo from "./BackgroundVideo";
 import ProfileCard from "./ProfileCard";
 import AvailabilityCard from "./AvailabilityCard";
+import { t } from "../../i18n";
 import {
   SocialRoot,
   MainWrapper,
@@ -19,13 +24,15 @@ const SocialContent: React.FC = () => {
     let iptal = false;
     configYukle()
       .then(c => {
-        if (!iptal) setCfg(c);
+        /* görüntüleme diline göre mesajları çevir (veri dosyası değişmez) */
+        if (!iptal) setCfg(gorunumCfg(c));
       })
       .catch(e => {
         if (!iptal)
           setHata(
-            "Müsaitlik verisi yüklenemedi. " +
-              (e instanceof Error ? e.message : "")
+            t("social.kart.veriHatasi", {
+              msg: e instanceof Error ? e.message : "",
+            })
           );
       });
     return () => {

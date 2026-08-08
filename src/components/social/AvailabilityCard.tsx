@@ -20,6 +20,7 @@ import {
   TzNot,
   HataMetni,
 } from "../styles/Social.styled";
+import { t } from "../../i18n";
 
 type Props = { cfg: MusaitlikConfig | null; hata: string };
 
@@ -64,10 +65,10 @@ const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
       <>
         <DurumSatir>
           <DurumNokta />
-          <KartEtiket>Müsaitlik durumu</KartEtiket>
+          <KartEtiket>{t("social.kart.musaitlikDurumu")}</KartEtiket>
           <DurumTarih>—</DurumTarih>
         </DurumSatir>
-        <DurumMetni>Müsaitlik yükleniyor…</DurumMetni>
+        <DurumMetni>{t("social.kart.musaitlikYukleniyor")}</DurumMetni>
         {hata && <HataMetni>{hata}</HataMetni>}
       </>
     );
@@ -99,7 +100,7 @@ const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
     <>
       <DurumSatir>
         <DurumNokta renk={veri.durumRenk} />
-        <KartEtiket>Müsaitlik durumu</KartEtiket>
+        <KartEtiket>{t("social.kart.musaitlikDurumu")}</KartEtiket>
         <DurumTarih>{veri.bugunTarih}</DurumTarih>
       </DurumSatir>
 
