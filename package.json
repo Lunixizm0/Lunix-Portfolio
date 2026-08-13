@@ -2,6 +2,7 @@
   "name": "Portfolio-Project",
   "private": true,
   "version": "150.0.0",
+  "type": "module",
   "packageManager": "pnpm@10.16.1",
   "scripts": {
     "dev": "vite --port 8001",

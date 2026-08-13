@@ -22,8 +22,8 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 
 ## Tech stack
 
-- [React 18](https://react.dev) + [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vitejs.dev) 6 + [vite-plugin-pwa](https://vite-pwa-org.netlify.app/)
+- [React 19](https://react.dev) + [TypeScript](https://www.typescriptlang.org/) 6
+- [Vite](https://vitejs.dev) 8 + [vite-plugin-pwa](https://vite-pwa-org.netlify.app/)
 - [styled-components](https://styled-components.com) 6 + styled-normalize
 - [react-icons](https://react-icons.github.io/react-icons/) 5
 - [lodash](https://lodash.com)
