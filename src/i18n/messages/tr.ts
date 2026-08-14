@@ -129,7 +129,6 @@ export const tr: En = {
       ozelGun: "Özel gün",
       bugunOkulYok: "Bugün okul yok",
       uyku: "Uyku",
-      haftalikOzetBos: "Hiçbir gün okul yok",
       gun1: "gün",
       gunN: "gün",
       saat1: "saat",
@@ -144,10 +143,6 @@ export const tr: En = {
       saatlerSeninDilimine: "Saatler senin saat dilimine göre",
       saatlerTurkiye: "Saatler Türkiye saatiyle",
       goruntulenme: "{n} görüntülenme",
-      okulSaatleri: "Okul saatleri",
-      okuldaMusaitDegil: " okulda, müsait değil",
-      musait: " müsait",
-      uykuNot: "Gece uykusu",
     },
     kart: {
       musaitlikDurumu: "Müsaitlik durumu",

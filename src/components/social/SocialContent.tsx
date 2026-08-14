@@ -53,7 +53,7 @@ const SocialContent: React.FC = () => {
             <ProfileCard cfg={cfg} />
           </GlassCard>
           <GlassCard delay={0.1}>
-            <AvailabilityCard cfg={cfg} hata={hata} />
+            <AvailabilityCard cfg={cfg} hata={hata} videoOnly={videoOnly} />
           </GlassCard>
         </CardsGrid>
       </MainWrapper>

@@ -167,4 +167,4 @@ export function seciliDurumMetni(
   return `${rel} · ${d.acik ? t("social.calendar.okul") : t("social.calendar.musaitim")}`;
 }
 
-export default Calendar;
+export default React.memo(Calendar);

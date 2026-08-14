@@ -106,4 +106,4 @@ const DaySchedule: React.FC<Props> = ({ cfg, seciliISO }) => {
   );
 };
 
-export default DaySchedule;
+export default React.memo(DaySchedule);

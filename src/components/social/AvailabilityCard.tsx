@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   MusaitlikConfig,
   bugunISO,
@@ -22,9 +22,9 @@ import {
 } from "../styles/Social.styled";
 import { t } from "../../i18n";
 
-type Props = { cfg: MusaitlikConfig | null; hata: string };
+type Props = { cfg: MusaitlikConfig | null; hata: string; videoOnly?: boolean };
 
-const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
+const AvailabilityCard: React.FC<Props> = ({ cfg, hata, videoOnly }) => {
   const [yil, setYil] = useState(0);
   const [ay, setAy] = useState(0); // 0-11
   const [seciliISO, setSeciliISO] = useState("");
@@ -42,13 +42,17 @@ const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
     setSeciliISO(b.seciliISO);
   }, [cfg]);
 
-  /* Her saniye: geri sayım + gün değişince ay/gün sıfırla */
+  /* Her saniye: geri sayım + gün değişince ay/gün sıfırla.
+     Video modunda interval durur; tekrar açılınca taze ana döner. */
   useEffect(() => {
-    if (!cfg) return;
+    if (!cfg || videoOnly) return;
+    const t = new Date();
+    setNow(t);
+    lastBugunRef.current = bugunISO(cfg, t);
     const id = setInterval(() => {
-      const t = new Date();
-      setNow(t);
-      const bugun = bugunISO(cfg, t);
+      const t2 = new Date();
+      setNow(t2);
+      const bugun = bugunISO(cfg, t2);
       if (bugun !== lastBugunRef.current) {
         lastBugunRef.current = bugun;
         const b = buguneDon(cfg);
@@ -58,6 +62,26 @@ const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
       }
     }, 1000);
     return () => clearInterval(id);
+  }, [cfg, videoOnly]);
+
+  const onceki = useCallback(() => {
+    const b = ayKaydir(yil, ay, seciliISO, -1);
+    setYil(b.yil);
+    setAy(b.ay);
+    setSeciliISO(b.seciliISO);
+  }, [yil, ay, seciliISO]);
+  const sonraki = useCallback(() => {
+    const b = ayKaydir(yil, ay, seciliISO, 1);
+    setYil(b.yil);
+    setAy(b.ay);
+    setSeciliISO(b.seciliISO);
+  }, [yil, ay, seciliISO]);
+  const bugune = useCallback(() => {
+    if (!cfg) return;
+    const b = buguneDon(cfg);
+    setYil(b.yil);
+    setAy(b.ay);
+    setSeciliISO(b.seciliISO);
   }, [cfg]);
 
   if (!cfg) {
@@ -76,25 +100,6 @@ const AvailabilityCard: React.FC<Props> = ({ cfg, hata }) => {
 
   const d = durum(cfg, now);
   const veri = kartVerisi(cfg, d);
-
-  const onceki = () => {
-    const b = ayKaydir(yil, ay, seciliISO, -1);
-    setYil(b.yil);
-    setAy(b.ay);
-    setSeciliISO(b.seciliISO);
-  };
-  const sonraki = () => {
-    const b = ayKaydir(yil, ay, seciliISO, 1);
-    setYil(b.yil);
-    setAy(b.ay);
-    setSeciliISO(b.seciliISO);
-  };
-  const bugune = () => {
-    const b = buguneDon(cfg);
-    setYil(b.yil);
-    setAy(b.ay);
-    setSeciliISO(b.seciliISO);
-  };
 
   return (
     <>

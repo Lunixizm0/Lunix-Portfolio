@@ -457,19 +457,36 @@ function sayimListesi(cfg: MusaitlikConfig, iso: string): Aralik[] {
     .sort((a, b) => a.bas.getTime() - b.bas.getTime());
 }
 
-/* uyku dahil bir sonraki meşgul aralık (gün aşan) */
+/* uyku dahil bir sonraki meşgul aralık (gün aşan).
+   Geri sayım her saniye yeniden hesaplanır; arama 400 güne kadar taradığı
+   için sonucu cfg başına önbellekliyoruz (bir sonraki aralık zamanla yalnız
+   ileriye kayar, dolayısıyla önbellek an geçmedikçe geçerlidir). */
+const sonrakiSayimOnbellek = new WeakMap<
+  MusaitlikConfig,
+  SonrakiSayim | null
+>();
+
 function sonrakiSayim(
   cfg: MusaitlikConfig,
   now: Date,
   limit = 400
 ): SonrakiSayim | null {
+  const onceki = sonrakiSayimOnbellek.get(cfg);
+  if (onceki !== undefined) {
+    if (onceki === null || onceki.an.getTime() > now.getTime()) return onceki;
+  }
   const bas = bugunISO(cfg, now);
+  let bulunan: SonrakiSayim | null = null;
   for (let i = 0; i < limit; i++) {
     const iso = gunEkle(bas, i);
     const a = sayimListesi(cfg, iso).find(x => x.bas > now);
-    if (a) return { iso, an: a.bas, aralik: a };
+    if (a) {
+      bulunan = { iso, an: a.bas, aralik: a };
+      break;
+    }
   }
-  return null;
+  sonrakiSayimOnbellek.set(cfg, bulunan);
+  return bulunan;
 }
 
 export function durum(cfg: MusaitlikConfig, now = new Date()): Durum {
@@ -542,57 +559,6 @@ export function ayIzgarasi(
 }
 
 /* ── metin üretimleri ──────────────────────────────────────────────── */
-
-export function gunSirasi(): number[] {
-  return [1, 2, 3, 4, 5, 6, 0];
-}
-
-/* "Pzt–Cum 09:00–16:00 · Cmt 10:00–14:00" — aynı saatli günleri gruplar */
-export function haftalikOzet(cfg: MusaitlikConfig): string {
-  const k = cfg.mesajlar?.gunlerKisa || [];
-  const h = cfg.haftalikSaatler || {};
-  const idx = (g: number) => (g === 0 ? 6 : g - 1);
-  const acik = gunSirasi().filter(g => h[String(g)] && h[String(g)].acik);
-  if (!acik.length) return t("social.engine.haftalikOzetBos");
-  const gruplar: Array<{ bas: string; bit: string; gunler: number[] }> = [];
-  for (const g of acik) {
-    const s = h[String(g)];
-    const son = gruplar[gruplar.length - 1];
-    if (
-      son &&
-      son.bas === s.bas &&
-      son.bit === s.bit &&
-      idx(g) === idx(son.gunler[son.gunler.length - 1]) + 1
-    ) {
-      son.gunler.push(g);
-    } else {
-      gruplar.push({ bas: s.bas, bit: s.bit, gunler: [g] });
-    }
-  }
-  return gruplar
-    .map(gr => {
-      const ad =
-        gr.gunler.length > 2
-          ? `${k[idx(gr.gunler[0])]}–${k[idx(gr.gunler[gr.gunler.length - 1])]}`
-          : gr.gunler.map(g => k[idx(g)]).join(", ");
-      return `${ad} ${gr.bas}–${gr.bit}`;
-    })
-    .join(" · ");
-}
-
-export function gunlerMetni(cfg: MusaitlikConfig): string {
-  const k = cfg.mesajlar?.gunlerKisa || [];
-  const h = cfg.haftalikSaatler || {};
-  const sirali = gunSirasi().filter(g => h[String(g)] && h[String(g)].acik);
-  if (!sirali.length) return "—";
-  const idx = (g: number) => (g === 0 ? 6 : g - 1);
-  const ardisik = sirali.every(
-    (g, i) => i === 0 || idx(g) === idx(sirali[i - 1]) + 1
-  );
-  return ardisik && sirali.length > 2
-    ? `${k[idx(sirali[0])]}–${k[idx(sirali[sirali.length - 1])]}`
-    : sirali.map(g => k[idx(g)]).join(", ");
-}
 
 export function tarihMetni(
   cfg: MusaitlikConfig,
@@ -690,74 +656,4 @@ export function kartVerisi(cfg: MusaitlikConfig, d: Durum): KartVerisi {
         ? "rgba(255,255,255,.55)"
         : "#ff453a",
   };
-}
-
-/* ── .ics üretimi ──────────────────────────────────────────────────── */
-
-const utc = (d: Date) =>
-  d
-    .toISOString()
-    .replace(/[-:]/g, "")
-    .replace(/\.\d{3}/, "");
-const kacir = (s: string) =>
-  String(s || "")
-    .replace(/([,;\\])/g, "\\$1")
-    .replace(/\n/g, "\\n");
-
-export function icsUret(
-  cfg: MusaitlikConfig,
-  {
-    baslangicISO,
-    ayAdedi = 12,
-    tekGun = null,
-  }: { baslangicISO?: string; ayAdedi?: number; tekGun?: string | null } = {}
-): string {
-  const bas = tekGun || baslangicISO || bugunISO(cfg);
-  const son = tekGun || gunEkle(bas, Math.round(ayAdedi * 30.5));
-  const satir = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "PRODID:-//" + kacir(cfg.kisi?.ad || "") + "//Musaitlik//TR",
-    "X-WR-CALNAME:" +
-      kacir((cfg.kisi?.ad || "") + " — " + t("social.engine.okulSaatleri")),
-    "X-WR-TIMEZONE:" + (cfg.saat?.kaynakSaatDilimi || "Europe/Istanbul"),
-  ];
-  for (let iso = bas; iso <= son; iso = gunEkle(iso, 1)) {
-    const g = gunBilgi(cfg, iso);
-    if (!g.acik || !g.araliklar.length) continue;
-    for (const ar of g.araliklar) {
-      satir.push(
-        "BEGIN:VEVENT",
-        "UID:" +
-          iso +
-          "-" +
-          ar.bas.getTime() +
-          "-musaitlik@" +
-          (cfg.kisi?.site || "local"),
-        "DTSTAMP:" + utc(new Date()),
-        "DTSTART:" + utc(ar.bas),
-        "DTEND:" + utc(ar.bit),
-        "SUMMARY:" +
-          kacir(
-            cfg.kisi?.ad ||
-              "" +
-                (cfg.ters
-                  ? t("social.engine.okuldaMusaitDegil")
-                  : t("social.engine.musait"))
-          ),
-        "DESCRIPTION:" +
-          kacir(
-            `${ar.etiket || t("social.engine.okul")}${g.not ? " · " + g.not : ""}`
-          ),
-        "TRANSP:OPAQUE",
-        "STATUS:CONFIRMED",
-        "URL:" + (cfg.kisi?.sosyalUrl || ""),
-        "END:VEVENT"
-      );
-    }
-  }
-  satir.push("END:VCALENDAR");
-  return satir.join("\r\n");
 }

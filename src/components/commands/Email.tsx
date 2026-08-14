@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import _ from "lodash";
 import { Wrapper } from "../styles/Output.styled";
 import { termContext } from "../Terminal";
 
@@ -7,7 +6,7 @@ const Email: React.FC = () => {
   const { history, index, rerender } = useContext(termContext);
 
   /* ===== get current command ===== */
-  const currentCommand = _.split(history[index], " ");
+  const currentCommand = history[index].split(" ");
 
   if (
     rerender &&

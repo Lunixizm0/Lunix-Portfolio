@@ -36,17 +36,6 @@ export const PreNameMobile = styled.pre`
   }
 `;
 
-export const PreImg = styled.pre`
-  @media (max-width: 550px) {
-    display: none;
-  }
-`;
-
-export const Seperator = styled.div`
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-`;
-
 export const Cmd = styled.span`
   color: ${({ theme }) => theme.colors?.primary};
 

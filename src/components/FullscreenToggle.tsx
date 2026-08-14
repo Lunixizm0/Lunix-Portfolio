@@ -103,4 +103,4 @@ const FullscreenToggle: React.FC<Props> = ({
   );
 };
 
-export default FullscreenToggle;
+export default React.memo(FullscreenToggle);

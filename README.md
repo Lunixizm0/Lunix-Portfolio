@@ -25,8 +25,6 @@ Live at **[lunixizm.website](https://lunixizm.website)**
 - [React 19](https://react.dev) + [TypeScript](https://www.typescriptlang.org/) 6
 - [Vite](https://vitejs.dev) 8 + [vite-plugin-pwa](https://vite-pwa-org.netlify.app/)
 - [styled-components](https://styled-components.com) 6 + styled-normalize
-- [react-icons](https://react-icons.github.io/react-icons/) 5
-- [lodash](https://lodash.com)
 - [Vitest](https://vitest.dev) 4 + Testing Library
 - [ESLint](https://eslint.org) + [Prettier](https://prettier.io) with [Husky](https://typicode.github.io/husky/) 9 + [lint-staged](https://github.com/lint-staged/lint-staged) pre-commit hooks
 - Package manager: [pnpm](https://pnpm.io) (pinned via `packageManager`)

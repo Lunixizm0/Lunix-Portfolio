@@ -93,4 +93,4 @@ const DesktopShortcuts: React.FC<Props> = ({
   );
 };
 
-export default DesktopShortcuts;
+export default React.memo(DesktopShortcuts);

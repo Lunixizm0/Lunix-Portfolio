@@ -115,18 +115,6 @@ export const Icons = {
       <path d="M12 .5a12 12 0 00-3.79 23.4c.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.22.09 1.86 1.26 1.86 1.26 1.08 1.85 2.83 1.31 3.52 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.46-1.33-5.46-5.92 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.29-1.23 3.29-1.23.67 1.66.25 2.88.13 3.18.77.84 1.23 1.91 1.23 3.22 0 4.6-2.81 5.61-5.48 5.91.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.58A12 12 0 0012 .5z" />
     </svg>
   ),
-  Facebook: (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M22 12a10 10 0 10-11.5 9.95V14.9H7.9V12h2.6V9.8c0-2.57 1.54-3.99 3.9-3.99 1.13 0 2.33.2 2.33.2v2.56h-1.31c-1.29 0-1.69.8-1.69 1.63V12h2.88l-.46 2.9h-2.42v7.05A10 10 0 0022 12z" />
-    </svg>
-  ),
-  Blog: <img src="/dev-black.webp" alt="dev.to logo" width="28" height="28" />,
   PDF: <img src="/pdf-icon.webp" alt="PDF icon" width="28" height="28" />,
   Social: (
     <svg
@@ -147,34 +135,6 @@ export const Icons = {
     </svg>
   ),
   Browser: <img src="/tor-icon.svg" alt="Tor logo" width="28" height="28" />,
-  Fullscreen: (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  ),
-  FullscreenExit: (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8 8l3 3M16 16l-3-3"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  ),
 };
 
 const DesktopShortcut: React.FC<Props> = ({

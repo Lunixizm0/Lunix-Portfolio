@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 /**
  * Generates html tabs
  * @param {number} num - The number of tabs
@@ -24,7 +22,7 @@ export const isArgInvalid = (
   arg: string[],
   action: string,
   options: string[]
-) => arg[0] !== action || !_.includes(options, arg[1]) || arg.length > 2;
+) => arg[0] !== action || !options.includes(arg[1]) || arg.length > 2;
 
 /**
  * Transform current cmd & arg into array
@@ -33,7 +31,7 @@ export const isArgInvalid = (
  * @returns {string[]} array of cmd string
  */
 export const getCurrentCmdArry = (currentCommand: string): string[] =>
-  _.split(currentCommand.trim(), " ");
+  currentCommand.trim().split(" ");
 
 /**
  * Check current render makes redirect
@@ -52,23 +50,7 @@ export const checkRedirect = (
   currentCommand[1] === "go" && // first arg is 'go'
   currentCommand.length > 1 && // current command has arg
   currentCommand.length < 4 && // if num of arg is valid (not `projects go 1 sth`)
-  _.includes([1, 2, 3, 4], parseInt(currentCommand[2])); // arg last part is one of id
-
-/**
- * Check current render makes redirect for theme
- * @param {boolean} rerender - is submitted or not
- * @param {string[]} currentCommand - current submitted command
- * @param {string[]} themes - the command of the function
- * @returns {boolean} redirect - true | false
- */
-/**
- * Theme switching is disabled in Kali-only mode
- */
-export const checkThemeSwitch = (
-  _rerender: boolean,
-  _currentCommand: string[],
-  _themes: string[]
-): boolean => false;
+  [1, 2, 3, 4].includes(parseInt(currentCommand[2])); // arg last part is one of id
 
 /**
  * Perform advanced tab actions
@@ -99,7 +81,7 @@ export const argTab = (
   }
 
   // 7) if input is 'socials go '
-  else if (_.startsWith(inputVal, "socials go ")) {
+  else if (inputVal.startsWith("socials go ")) {
     ["1.GitHub", "2.Linkedin", "3.Mail"].forEach(t => {
       hintsCmds = [...hintsCmds, t];
     });
@@ -107,7 +89,7 @@ export const argTab = (
   }
 
   // 8) if input is 'projects go '
-  else if (_.startsWith(inputVal, "projects go ")) {
+  else if (inputVal.startsWith("projects go ")) {
     [
       "1.ahenk-debug",
       "2.Data-Collector",

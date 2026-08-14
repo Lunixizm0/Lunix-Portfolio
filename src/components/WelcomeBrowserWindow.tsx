@@ -775,4 +775,4 @@ const WelcomeBrowserWindow: React.FC<Props> = ({
   );
 };
 
-export default WelcomeBrowserWindow;
+export default React.memo(WelcomeBrowserWindow);

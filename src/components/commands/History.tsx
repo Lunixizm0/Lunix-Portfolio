@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import _ from "lodash";
 import { Wrapper } from "../styles/Output.styled";
 import { termContext } from "../Terminal";
 
+let historyId = 0;
+const nextId = () => ++historyId;
+
 const History: React.FC = () => {
   const { history, index, executeCommand } = useContext(termContext);
-  const currentHistory = _.reverse(_.slice(history, 0, index));
+  const currentHistory = history.slice(0, index).reverse();
 
   const handleHistoryClick = (cmd: string) => {
     if (executeCommand) {
@@ -17,7 +19,7 @@ const History: React.FC = () => {
     <Wrapper data-testid="history">
       {currentHistory.map(cmd => (
         <div
-          key={_.uniqueId(`${cmd}_`)}
+          key={`${cmd}_${nextId()}`}
           onClick={() => handleHistoryClick(cmd)}
           style={{
             cursor: "pointer",

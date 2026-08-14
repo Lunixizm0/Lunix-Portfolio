@@ -479,4 +479,4 @@ const SocialWindow: React.FC<Props> = ({
   );
 };
 
-export default SocialWindow;
+export default React.memo(SocialWindow);

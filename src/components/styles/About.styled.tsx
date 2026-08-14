@@ -8,11 +8,3 @@ export const AboutWrapper = styled.div`
     line-height: 1.5rem;
   }
 `;
-
-export const HighlightSpan = styled.span`
-  font-weight: 700;
-`;
-
-export const HighlightAlt = styled.span`
-  font-weight: 700;
-`;

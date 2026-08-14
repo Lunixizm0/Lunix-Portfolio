@@ -587,4 +587,4 @@ const ResumeWindow: React.FC<Props> = ({
   );
 };
 
-export default ResumeWindow;
+export default React.memo(ResumeWindow);

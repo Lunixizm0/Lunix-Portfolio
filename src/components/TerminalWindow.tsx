@@ -510,4 +510,4 @@ const TerminalWindow: React.FC<Props> = ({
   );
 };
 
-export default TerminalWindow;
+export default React.memo(TerminalWindow);

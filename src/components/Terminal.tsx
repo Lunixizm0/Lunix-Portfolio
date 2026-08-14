@@ -2,10 +2,10 @@ import React, {
   createContext,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import _ from "lodash";
 import Output from "./Output";
 import TermInfo from "./TermInfo";
 import {
@@ -69,42 +69,25 @@ const Terminal = () => {
   const containerRef = useRef(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [inputVal, setInputVal] = useState("");
   // Start with 'welcome' so it executes first on load
   const [cmdHistory, setCmdHistory] = useState<string[]>(["welcome", "about"]);
   const [rerender, setRerender] = useState(false);
   const [hints, setHints] = useState<string[]>([]);
-  // History navigation index: null means not navigating; otherwise index into cmdHistory (oldest -> newest)
-  const [histIndex, setHistIndex] = useState<number | null>(null);
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setRerender(false);
-      setInputVal(e.target.value);
-    },
-    [inputVal]
-  );
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setCmdHistory([...cmdHistory, inputVal]);
-    setInputVal("");
+  const executeCommand = useCallback((cmd: string) => {
+    setCmdHistory(prev => [...prev, cmd]);
     setRerender(true);
     setHints([]);
-    setHistIndex(null);
-  };
+  }, []);
 
-  const clearHistory = () => {
+  const clearHistory = useCallback(() => {
     setCmdHistory([]);
     setHints([]);
-  };
+  }, []);
 
-  const executeCommand = (cmd: string) => {
-    setCmdHistory([...cmdHistory, cmd]);
-    setRerender(true);
-    setHints([]);
-    setHistIndex(null);
-  };
+  // Reset the "newly submitted" flag on the next keystroke so a subsequent
+  // identical submit still triggers the redirect effects.
+  const handleInput = useCallback(() => setRerender(false), []);
 
   // focus on input when terminal is clicked
   const handleDivClick = () => {
@@ -115,11 +98,120 @@ const Terminal = () => {
     return () => {
       document.removeEventListener("click", handleDivClick);
     };
-  }, [containerRef]);
+  }, []);
+
+  // Auto-scroll to bottom when history updates or new output renders
+  useEffect(() => {
+    const el = containerRef?.current as unknown as HTMLElement | null;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [cmdHistory, rerender]);
+
+  const renderedHistory = useMemo(
+    () =>
+      cmdHistory.map((cmdH, index) => {
+        const commandArray = cmdH.trim().split(" ");
+        const validCommand = commands.find(c => c.cmd === commandArray[0]);
+        const contextValue = {
+          arg: commandArray.slice(1),
+          history: cmdHistory,
+          rerender,
+          index,
+          clearHistory,
+          executeCommand,
+        };
+        return (
+          <div key={index}>
+            <div>
+              <TermInfo />
+              <MobileBr />
+              <MobileSpan>&#62;</MobileSpan>
+              <span data-testid="input-command">{cmdH}</span>
+            </div>
+            {validCommand || hiddenCommands.includes(commandArray[0]) ? (
+              <termContext.Provider value={contextValue}>
+                <Output index={index} cmd={commandArray[0]} />
+              </termContext.Provider>
+            ) : cmdH === "" ? (
+              <Empty />
+            ) : (
+              <CmdNotFound data-testid={`not-found-${index}`}>
+                {t("terminal.notFound", { cmd: cmdH })}
+              </CmdNotFound>
+            )}
+          </div>
+        );
+      }),
+    [cmdHistory, rerender, clearHistory, executeCommand]
+  );
+
+  return (
+    <Wrapper data-testid="terminal-wrapper" ref={containerRef}>
+      {renderedHistory}
+
+      {hints.length > 1 && (
+        <div>
+          {hints.map(hCmd => (
+            <Hints key={hCmd}>{hCmd}</Hints>
+          ))}
+        </div>
+      )}
+
+      <TerminalInput
+        cmdHistory={cmdHistory}
+        inputRef={inputRef}
+        onExecute={executeCommand}
+        onInput={handleInput}
+        onClear={clearHistory}
+        setHints={setHints}
+      />
+    </Wrapper>
+  );
+};
+
+type TerminalInputProps = {
+  cmdHistory: string[];
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  onExecute: (cmd: string) => void;
+  onInput: () => void;
+  onClear: () => void;
+  setHints: React.Dispatch<React.SetStateAction<string[]>>;
+};
+
+// Owns the live input value + history navigation so that typing only
+// re-renders the form, not the whole command history.
+const TerminalInput: React.FC<TerminalInputProps> = ({
+  cmdHistory,
+  inputRef,
+  onExecute,
+  onInput,
+  onClear,
+  setHints,
+}) => {
+  const [inputVal, setInputVal] = useState("");
+  // History navigation index: null means not navigating; otherwise index into cmdHistory (oldest -> newest)
+  const [histIndex, setHistIndex] = useState<number | null>(null);
+
+  // Reset navigation whenever history changes (submit or re-execute)
+  useEffect(() => {
+    setHistIndex(null);
+  }, [cmdHistory]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onExecute(inputVal);
+    setInputVal("");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onInput();
+    setInputVal(e.target.value);
+  };
 
   // Keyboard Press
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setRerender(false);
+    onInput();
     const ctrlI = e.ctrlKey && e.key.toLowerCase() === "i";
     const ctrlL = e.ctrlKey && e.key.toLowerCase() === "l";
 
@@ -130,7 +222,7 @@ const Terminal = () => {
 
       let hintsCmds: string[] = [];
       commands.forEach(({ cmd }) => {
-        if (_.startsWith(cmd, inputVal)) {
+        if (cmd.startsWith(inputVal)) {
           hintsCmds = [...hintsCmds, cmd];
         }
       });
@@ -144,7 +236,7 @@ const Terminal = () => {
       }
       // if only one command to autocomplete
       else if (hintsCmds.length === 1) {
-        const currentCmd = _.split(inputVal, " ");
+        const currentCmd = inputVal.split(" ");
         setInputVal(
           currentCmd.length !== 1
             ? `${currentCmd[0]} ${currentCmd[1]} ${hintsCmds[0]}`
@@ -157,7 +249,7 @@ const Terminal = () => {
 
     // if Ctrl + L
     if (ctrlL) {
-      clearHistory();
+      onClear();
     }
 
     // Go previous cmd
@@ -194,81 +286,29 @@ const Terminal = () => {
       inputRef?.current?.focus();
     }, 1);
     return () => clearTimeout(timer);
-  }, [inputRef, inputVal, histIndex]);
-
-  // Auto-scroll to bottom when history updates or new output renders
-  useEffect(() => {
-    const el = containerRef?.current as unknown as HTMLElement | null;
-    if (el) {
-      el.scrollTop = el.scrollHeight;
-    }
-  }, [cmdHistory, rerender]);
+  }, [inputVal, histIndex]);
 
   return (
-    <Wrapper data-testid="terminal-wrapper" ref={containerRef}>
-      {cmdHistory.map((cmdH, index) => {
-        const commandArray = _.split(_.trim(cmdH), " ");
-        const validCommand = _.find(commands, { cmd: commandArray[0] });
-        const contextValue = {
-          arg: _.drop(commandArray),
-          history: cmdHistory,
-          rerender,
-          index,
-          clearHistory,
-          executeCommand,
-        };
-        return (
-          <div key={index}>
-            <div>
-              <TermInfo />
-              <MobileBr />
-              <MobileSpan>&#62;</MobileSpan>
-              <span data-testid="input-command">{cmdH}</span>
-            </div>
-            {validCommand || hiddenCommands.includes(commandArray[0]) ? (
-              <termContext.Provider value={contextValue}>
-                <Output index={index} cmd={commandArray[0]} />
-              </termContext.Provider>
-            ) : cmdH === "" ? (
-              <Empty />
-            ) : (
-              <CmdNotFound data-testid={`not-found-${index}`}>
-                {t("terminal.notFound", { cmd: cmdH })}
-              </CmdNotFound>
-            )}
-          </div>
-        );
-      })}
-
-      {hints.length > 1 && (
-        <div>
-          {hints.map(hCmd => (
-            <Hints key={hCmd}>{hCmd}</Hints>
-          ))}
-        </div>
-      )}
-
-      <Form onSubmit={handleSubmit}>
-        <label htmlFor="terminal-input">
-          <TermInfo /> <MobileBr />
-          <MobileSpan>&#62;</MobileSpan>
-        </label>
-        <Input
-          title="terminal-input"
-          type="text"
-          id="terminal-input"
-          autoComplete="off"
-          spellCheck="false"
-          autoFocus
-          autoCapitalize="off"
-          ref={inputRef}
-          value={inputVal}
-          onKeyDown={handleKeyDown}
-          onChange={handleChange}
-        />
-      </Form>
-    </Wrapper>
+    <Form onSubmit={handleSubmit}>
+      <label htmlFor="terminal-input">
+        <TermInfo /> <MobileBr />
+        <MobileSpan>&#62;</MobileSpan>
+      </label>
+      <Input
+        title="terminal-input"
+        type="text"
+        id="terminal-input"
+        autoComplete="off"
+        spellCheck="false"
+        autoFocus
+        autoCapitalize="off"
+        ref={inputRef}
+        value={inputVal}
+        onKeyDown={handleKeyDown}
+        onChange={handleChange}
+      />
+    </Form>
   );
 };
 
-export default Terminal;
+export default React.memo(Terminal);

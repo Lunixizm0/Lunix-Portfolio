@@ -129,7 +129,6 @@ export const en = {
       ozelGun: "Special day",
       bugunOkulYok: "No school today",
       uyku: "Sleep",
-      haftalikOzetBos: "No school days at all",
       gun1: "day",
       gunN: "days",
       saat1: "hr",
@@ -144,10 +143,6 @@ export const en = {
       saatlerSeninDilimine: "Times shown in your timezone",
       saatlerTurkiye: "Times in Türkiye time (UTC+3)",
       goruntulenme: "{n} views",
-      okulSaatleri: "School hours",
-      okuldaMusaitDegil: " — school, not available",
-      musait: " — available",
-      uykuNot: "Night sleep",
     },
     kart: {
       musaitlikDurumu: "Availability status",
