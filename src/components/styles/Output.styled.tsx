@@ -14,3 +14,19 @@ export const UsageDiv = styled.div<{ marginY?: boolean }>`
   margin-bottom: 0.75rem;
   line-height: 1.5rem;
 `;
+
+export const NeofetchContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+`;
+
+export const NeofetchArt = styled.pre`
+  margin: 0;
+`;
+
+export const NeofetchAccent = styled.span`
+  color: ${({ theme }) => theme.colors?.primary};
+`;

@@ -46,7 +46,7 @@ const Projects: React.FC = () => {
 
   /* ===== check arg is valid ===== */
   const checkArg = () =>
-    isArgInvalid(arg, "go", ["1", "2", "3", "4"]) ? (
+    isArgInvalid(arg, "go", ["1", "2", "3", "4", "5", "6", "7"]) ? (
       <Usage cmd="projects" />
     ) : null;
 
@@ -75,24 +75,41 @@ const projects = [
   {
     id: 1,
     title: "ahenk-debug",
-    desc: "A diagnostic tool for Ahenk, a remote managament system for Pardus ETAP.",
+    desc: "A diagnostic tool for Ahenk, a remote management system for Pardus ETAP.",
     url: "https://github.com/Lunixizm0/ahenk-debug",
   },
-
   {
     id: 2,
-    title: "Data-Collector",
-    desc: "A data collector tool for Windows.",
-    url: "https://github.com/Lunixizm0/Data-Collector",
+    title: "linux-autoruns",
+    desc: "Sysinternals Autoruns equivalent for Linux, scanning 16 autostart entry points with a Qt6 GUI.",
+    url: "https://github.com/Lunixizm0/linux-autoruns",
   },
   {
     id: 3,
+    title: "firebase-dumper",
+    desc: "Firebase assessment tool that dumps Firestore, Auth, Storage, RTDB, security rules and more via the Admin SDK.",
+    url: "https://github.com/Lunixizm0/firebase-dumper",
+  },
+  {
+    id: 4,
     title: "Walkie Talkie",
     desc: "A communication tool that allows users to send messages and talk securely over LAN.",
     url: "https://github.com/Lunixizm0/Walkie",
   },
   {
-    id: 4,
+    id: 5,
+    title: "SearchThings",
+    desc: "Parallel file search tool written in Rust, with regex support and a live progress bar.",
+    url: "https://github.com/Lunixizm0/SearchThings",
+  },
+  {
+    id: 6,
+    title: "Vulnerable-API",
+    desc: "Deliberately vulnerable Flask API (SQLi, XSS, SSTI, LFI...) for security training, with paired safe endpoints.",
+    url: "https://github.com/Lunixizm0/Vulnerable-API",
+  },
+  {
+    id: 7,
     title: "Lunix-Portfolio",
     desc: "This interactive terminal-style portfolio & social hub (the site you're on right now).",
     url: "https://github.com/Lunixizm0/Lunix-Portfolio",

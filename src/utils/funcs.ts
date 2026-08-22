@@ -50,7 +50,7 @@ export const checkRedirect = (
   currentCommand[1] === "go" && // first arg is 'go'
   currentCommand.length > 1 && // current command has arg
   currentCommand.length < 4 && // if num of arg is valid (not `projects go 1 sth`)
-  [1, 2, 3, 4].includes(parseInt(currentCommand[2])); // arg last part is one of id
+  [1, 2, 3, 4, 5, 6, 7].includes(parseInt(currentCommand[2])); // arg last part is one of id
 
 /**
  * Perform advanced tab actions
@@ -92,9 +92,12 @@ export const argTab = (
   else if (inputVal.startsWith("projects go ")) {
     [
       "1.ahenk-debug",
-      "2.Data-Collector",
-      "3.Walkie Talkie",
-      "4.Lunix-Portfolio",
+      "2.linux-autoruns",
+      "3.firebase-dumper",
+      "4.Walkie Talkie",
+      "5.SearchThings",
+      "6.Vulnerable-API",
+      "7.Lunix-Portfolio",
     ].forEach(t => {
       hintsCmds = [...hintsCmds, t];
     });

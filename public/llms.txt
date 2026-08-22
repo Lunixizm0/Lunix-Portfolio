@@ -1,7 +1,7 @@
 # Lunixizm — Utku Ceylan
 
 Version: 2026-08
-Last Updated: 2026-07-26
+Last Updated: 2026-08-22
 
 > Security researcher focused on Linux systems and Vulnerability Research. Discovered and reported multiple finding across GNU/Linux ecosystem.
 
@@ -79,6 +79,55 @@ Developed within ThinkTank Software.
 
 ---
 
+### linux-autoruns
+
+Sysinternals Autoruns equivalent for Linux.
+
+Features include:
+
+- Scans 16 autostart entry points (systemd, cron, XDG Autostart, shell profiles, PAM, kernel sysctl and more)
+- PySide6 (Qt6) graphical interface with category filtering
+- Edit mode to enable or disable autostart entries
+- JSON and CSV export
+- Distributed as a Python package (pip / pipx)
+
+---
+
+### firebase-dumper
+
+Firebase security assessment tool built in TypeScript.
+
+Features include:
+
+- Extracts Firestore, Auth, Storage, Realtime Database, security rules, Remote Config, App Check, FCM and ML metadata via the Firebase Admin SDK
+- Anonymous metadata listing for publicly accessible S3-compatible buckets without cloud credentials
+- Dry-run mode, configurable service selection, retry handling
+- Docker support for scheduled backups
+
+---
+
+### SearchThings
+
+Parallel file search tool written in Rust providing:
+
+- Multi-threaded scanning
+- Regex support
+- Real-time progress bar (speed, ETA)
+- Automatic encoding detection
+- Interactive and CLI modes
+
+---
+
+### Vulnerable-API
+
+Educational Flask API containing intentional web vulnerabilities:
+
+- SQL injection, XSS, SSTI, LFI, RFI, Host Header Injection
+- Each vulnerability has paired safe (`novuln`) and vulnerable (`vuln`) endpoints
+- Intended only for isolated training environments
+
+---
+
 ### Portfolio Website
 
 Interactive Kali Linux-inspired portfolio website featuring:
@@ -95,6 +144,7 @@ Interactive Kali Linux-inspired portfolio website featuring:
 
 Programming
 - Python
+- JavaScript
 - Shell Script
 
 Linux / Systems
@@ -110,6 +160,8 @@ Development
 
 Security
 - Vulnerability Research
+- Web Application Security
+- Cloud Security (Firebase)
 - Linux Security
 - Coordinated Disclosure
 - Network Security

@@ -1,23 +1,44 @@
+import { useContext } from "react";
+import { t } from "../i18n";
 import About from "./commands/About";
 import Clear from "./commands/Clear";
 import Echo from "./commands/Echo";
 import Email from "./commands/Email";
 import GeneralOutput from "./commands/GeneralOutput";
-import Resume from "./commands/Resume";
 import Help from "./commands/Help";
-import Welcome from "./commands/Welcome";
 import History from "./commands/History";
 import Projects from "./commands/Projects";
+import Resume from "./commands/Resume";
 import Socials from "./commands/Socials";
-import { OutputContainer, UsageDiv } from "./styles/Output.styled";
+import Welcome from "./commands/Welcome";
+import {
+  NeofetchAccent,
+  NeofetchArt,
+  NeofetchContainer,
+  OutputContainer,
+  UsageDiv,
+} from "./styles/Output.styled";
 import { termContext } from "./Terminal";
-import { t } from "../i18n";
-import { useContext } from "react";
 
 type Props = {
   index: number;
   cmd: string;
 };
+
+const neofetchInfo: [string, string][] = [
+  ["OS", "Humanoid OS x86_64 (Kali-flavored)"],
+  ["Host", "Biological Chassis v1 (Utku)"],
+  ["Kernel", "6.9.0-lunix-gen1"],
+  ["Uptime", "15 years, 0 crashes* (*unverified)"],
+  ["Packages", "1337 (dpkg), 42 (broken snaps)"],
+  ["Shell", "bash 5.2.15 (zsh refused)"],
+  ["Resolution", "1920x1080 @ -4.75 myopia"],
+  ["DE/WM", "XFCE / Xfwm4"],
+  ["Terminal", "this browser tab"],
+  ["CPU", "Human Brain (2) @ 4.5GHz [caffeine-cooled]"],
+  ["GPU", "Imagination Integrated"],
+  ["Memory", "2.1GiB / 16GiB (97% browser tabs)"],
+];
 
 const Output: React.FC<Props> = ({ index, cmd }) => {
   const { arg } = useContext(termContext);
@@ -44,7 +65,33 @@ const Output: React.FC<Props> = ({ index, cmd }) => {
   if (cmd === "neofetch") {
     return (
       <OutputContainer>
-        <GeneralOutput>{`kali 2024.2 \n Kernel: 6.5.0-kali1-amd64 \n Shell: bash 5.2.15 \n Resolution: 1920x1080 \n DE: XFCE \n WM: Xfwm4 \n CPU: Intel i7-9750H (12) @ 4.5GHz \n Memory: 2.1GiB / 16GiB`}</GeneralOutput>
+        <NeofetchContainer data-testid="neofetch">
+          <NeofetchArt>{`
+     ______
+    [ o  o ]
+    [  __  ]
+    [______]
+      |  |
+   ___|  |___
+  / [       ] \\
+  \\ [______] /
+   \\________/
+      |  |
+      d  b
+          `}</NeofetchArt>
+          <div>
+            <div>
+              <NeofetchAccent>lunix</NeofetchAccent>@humanoid
+            </div>
+            <div>--------------</div>
+            {neofetchInfo.map(([key, value]) => (
+              <div key={key}>
+                <NeofetchAccent>{key}:</NeofetchAccent> {value}
+              </div>
+            ))}
+            <div>* since first boot, allegedly</div>
+          </div>
+        </NeofetchContainer>
       </OutputContainer>
     );
   }
@@ -78,7 +125,7 @@ const Output: React.FC<Props> = ({ index, cmd }) => {
           pwd: <GeneralOutput>/home/lunix</GeneralOutput>,
           socials: <Socials />,
           welcome: <Welcome />,
-          whoami: <GeneralOutput>kali</GeneralOutput>,
+          whoami: <GeneralOutput>humanoid</GeneralOutput>,
         }[cmd]
       }
     </OutputContainer>
